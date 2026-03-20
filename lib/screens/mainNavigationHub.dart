@@ -1,0 +1,82 @@
+import 'package:e_commerce_refactor/screens/bidScreen.dart';
+import 'package:e_commerce_refactor/screens/feedScreen.dart';
+import 'package:e_commerce_refactor/screens/listingScreen.dart';
+import 'package:e_commerce_refactor/screens/profileScreen.dart';
+import 'package:flutter/material.dart';
+
+class MainNavigationHub extends StatefulWidget {
+  const MainNavigationHub({super.key});
+
+  @override
+  State<MainNavigationHub> createState() => _MainNavigationHubState();
+}
+
+class _MainNavigationHubState extends State<MainNavigationHub> {
+
+  int _currentIndex = 0;
+
+  final List<Widget> _pages =[
+    const FeedScreen(),
+    const MyBids(),
+    const MyListings(),
+    const ProfileScreen()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
+      ),
+      bottomNavigationBar: Container(
+        margin:EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          gradient: LinearGradient(colors: [Colors.indigo, Colors.indigoAccent])
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadiusGeometry.circular(25),
+          child: NavigationBar(
+            height: 65,
+            elevation: 4,
+            shadowColor: Colors.black,
+            backgroundColor: Colors.indigo.shade100,
+            indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10.0)),
+            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+            selectedIndex: _currentIndex,
+            onDestinationSelected: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined), 
+                selectedIcon: Icon(Icons.home_filled),
+                label: "Feed"
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.gavel_outlined), 
+                selectedIcon: Icon(Icons.gavel),
+                label: "My Bids"
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.book_outlined), 
+                selectedIcon: Icon(Icons.book),
+                label: "My Listings"
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.person_2_outlined), 
+                selectedIcon: Icon(Icons.person_2),
+                label: "Profile"
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
