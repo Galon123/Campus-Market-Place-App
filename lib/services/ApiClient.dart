@@ -71,6 +71,11 @@ class AuthInterceptor extends Interceptor{
   @override
   Future<void> onError(DioException error, ErrorInterceptorHandler handler) async{
 
+    if (error.requestOptions.path.contains('/refresh') || 
+      error.requestOptions.path.contains('/login')) {
+    return handler.next(error);
+  }
+
     if(error.response?.statusCode == 401){
       debugPrint("Access Token Expired.Attempting Refresh....");
       
@@ -85,7 +90,7 @@ class AuthInterceptor extends Interceptor{
           return handler.resolve(response);
         }
       } catch (e) {
-        debugPrint("Refresh Toke Expired. Logging out....");
+        debugPrint("Refresh Token Expired. Logging out....");
       }
     }
 

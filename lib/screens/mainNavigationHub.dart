@@ -37,16 +37,13 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
         children: _pages,
       ),
       bottomNavigationBar: Container(
-        margin:EdgeInsets.only(bottom: 10,left: 5, right: 5),
-        padding: EdgeInsets.all(2.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          gradient: LinearGradient(colors: [Colors.indigo, Colors.indigoAccent])
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadiusGeometry.circular(25),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           child: NavigationBar(
-            height: 65,
+            height: 75,
             elevation: 4,
             shadowColor: Colors.black,
             backgroundColor: Colors.indigo.shade100,

@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               borderRadius: BorderRadius.circular(20),
                                               border: Border.all(color: Colors.white38),
                                             ),
-                                            child: Text('✔ Verified Student', style: TextStyle(color: AppColors.positiveTextColor, fontSize: 10)),
+                                            child: Text('✔ Verified Student', style: TextStyle(color: AppColors.textColorDefault, fontSize: 10)),
                                           ),
                                         ],
                                       ),
@@ -112,6 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 60,),
                   _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => { widget.onNavigate(2) },),
                   _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1) }),
+                  _buildCard(icon: Icons.logout, title: "Logout", onTap: userProvider.logout)
                   
                 ],
               ),
