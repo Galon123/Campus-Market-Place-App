@@ -22,64 +22,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-
-                  // Curved Header
-                  ClipPath(
-                    clipper: HeaderClipper(),
-                    child: Container(
-                      height: 300,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xFF283593), Color(0xFF7986CB)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      child: SafeArea(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Column(
-                            children: [
-                              // top bar
-                              Text('My Profile', style: TextStyle(color: Colors.white, fontSize: AppTextSizes.mainHeadings, fontWeight: FontWeight.bold)),
-                              SizedBox(height: 48),
-
-                              Row(
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      ClipPath(
+                        clipper: HeaderClipper(),
+                        child: Container(
+                          height: 300,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Color(0xFF283593), Color(0xFF7986CB)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: SafeArea(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              child: Column(
                                 children: [
-                                  CircleAvatar(
-                                    radius: 36,
-                                    backgroundColor: Color(0xFF7986CB),
-                                    child: Text(userProvider.username[0], style: TextStyle(fontSize: AppTextSizes.subHeadings, color: Colors.white)),
-                                  ),
-                                  SizedBox(width: 24),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  // top bar
+                                  Text('My Profile', style: TextStyle(color: Colors.white, fontSize: AppTextSizes.mainHeadings, fontWeight: FontWeight.bold)),
+                                  SizedBox(height: 48),
+
+                                  Row(
                                     children: [
-                                      Text(userProvider.username, style: TextStyle(color: Colors.white, fontSize: AppTextSizes.subHeadings, fontWeight: FontWeight.bold)),
-                                      Text(userProvider.email, style: TextStyle(color: Colors.white70, fontSize: AppTextSizes.mediumText)),
-                                      SizedBox(height: 6),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white24,
-                                          borderRadius: BorderRadius.circular(20),
-                                          border: Border.all(color: Colors.white38),
-                                        ),
-                                        child: Text('✔ Verified Student', style: TextStyle(color: AppColors.positiveTextColor, fontSize: 10)),
+                                      CircleAvatar(
+                                        radius: 36,
+                                        backgroundColor: Color(0xFF7986CB),
+                                        child: Text(userProvider.username[0], style: TextStyle(fontSize: AppTextSizes.subHeadings, color: Colors.white)),
+                                      ),
+                                      SizedBox(width: 24),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(userProvider.username, style: TextStyle(color: Colors.white, fontSize: AppTextSizes.subHeadings, fontWeight: FontWeight.bold)),
+                                          Text(userProvider.email, style: TextStyle(color: Colors.white70, fontSize: AppTextSizes.mediumText)),
+                                          SizedBox(height: 6),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white24,
+                                              borderRadius: BorderRadius.circular(20),
+                                              border: Border.all(color: Colors.white38),
+                                            ),
+                                            child: Text('✔ Verified Student', style: TextStyle(color: AppColors.positiveTextColor, fontSize: 10)),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+
+                      Positioned(
+                        bottom: -30,
+                        left: 20,
+                        right: 20,
+                        child: Container(
+                          padding: EdgeInsets.all(15.0),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [AppColors.primaryColor, AppColors.secondaryColor],
+                              begin: AlignmentGeometry.topCenter,
+                              end: AlignmentGeometry.bottomCenter
+                            ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black.withValues(), blurRadius: 12, offset: const Offset(0,2))
+                            ]
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              _statItem(value: userProvider.products.length.toString(), field: "Listings"),
+                              _statItem(value: "1", field: "Bids"),
+                              _statItem(value: userProvider.rating.toString(), field: "Rating")
+                            ],
+                          ),
+                        )
+                      )
+                    ],
                   ),
-                  const SizedBox(height: 24,),
+                  const SizedBox(height: 60,),
                   _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => { widget.onNavigate(2) },),
-                  _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1) })
+                  _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1) }),
+                  
                 ],
               ),
             ),
@@ -113,6 +146,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),) : null,
         trailing: Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.textColorDefault,),
         onTap: onTap,
+      ),
+    );
+  }
+
+  Widget _statItem({required String value, required String field}){
+
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Text(value, style: TextStyle(
+                fontSize: AppTextSizes.mediumText,
+                color: AppColors.textColorDefault,
+                fontWeight: FontWeight.w700
+              ),),
+              field == "Rating" ? Icon(Icons.star, color: Colors.amber,) : const SizedBox.shrink()
+            ],
+          ),
+          SizedBox(height: 5,),
+          Text(field, style: TextStyle(
+                fontSize: AppTextSizes.mediumText,
+                color: AppColors.textColorDefault,
+                fontWeight: FontWeight.w700
+              ),)
+        ],
       ),
     );
   }
