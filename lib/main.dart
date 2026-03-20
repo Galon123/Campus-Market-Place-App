@@ -1,4 +1,8 @@
+import 'package:e_commerce_refactor/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
+import 'package:e_commerce_refactor/screens/bidScreen.dart';
+import 'package:e_commerce_refactor/screens/feedScreen.dart';
+import 'package:e_commerce_refactor/screens/listingScreen.dart';
 import 'package:e_commerce_refactor/screens/loginScreen.dart';
 import 'package:e_commerce_refactor/screens/mainNavigationHub.dart';
 import 'package:e_commerce_refactor/screens/registerScreen.dart';
@@ -40,8 +44,26 @@ class MarketplaceApp extends StatelessWidget {
       : MainNavigationHub()
       ,
       routes: {
-        '/register' : (context) => const RegisterScreen()
+        '/login' : (context) => const LoginScreen(),
+        '/register' : (context) => const RegisterScreen(),
+        '/feed' : (context) => const FeedScreen(),
+        '/mybids' : (context) => const MyBids(),
+        '/mylistings' : (context) => const MyListings()
       },
+      theme: ThemeData(
+        useMaterial3: true,
+        navigationBarTheme: NavigationBarThemeData(
+          labelTextStyle: WidgetStateProperty.resolveWith((state) {
+            if(state.contains(WidgetState.selected)){
+              return TextStyle(
+                fontSize: AppTextSizes.mediumText,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textComplemtaryColor
+              );
+            }
+          })
+        )
+      ),
     );
   }
 }

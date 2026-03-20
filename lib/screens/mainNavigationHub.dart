@@ -15,11 +15,17 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
 
   int _currentIndex = 0;
 
-  final List<Widget> _pages =[
-    const FeedScreen(),
-    const MyBids(),
-    const MyListings(),
-    const ProfileScreen()
+  void _navigateTo(int value) {
+    setState(() {
+      _currentIndex = value;
+    });
+  }
+
+  late final List<Widget> _pages =[
+    FeedScreen(),
+    MyBids(),
+    MyListings(),
+    ProfileScreen(onNavigate : _navigateTo)
   ];
 
   @override
@@ -31,7 +37,7 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
         children: _pages,
       ),
       bottomNavigationBar: Container(
-        margin:EdgeInsets.only(bottom: 20),
+        margin:EdgeInsets.only(bottom: 10,left: 5, right: 5),
         padding: EdgeInsets.all(2.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),

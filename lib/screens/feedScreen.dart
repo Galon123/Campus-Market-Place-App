@@ -13,13 +13,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.gradientColor1, AppColors.gradientColor2],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight
-          )
-        ),
+        
       ),
     );
   }
