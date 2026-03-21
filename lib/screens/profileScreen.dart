@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen:false);
+    final userProvider = Provider.of<UserProvider>(context, listen:true);
     return Scaffold(
             body: SingleChildScrollView(
               child: Column(
@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   // top bar
                                   Text('My Profile', style: TextStyle(color: Colors.white, fontSize: AppTextSizes.mainHeadings, fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 48),
+                                  SizedBox(height: 24),
 
                                   Row(
                                     children: [
@@ -58,6 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         children: [
                                           Text(userProvider.username, style: TextStyle(color: Colors.white, fontSize: AppTextSizes.subHeadings, fontWeight: FontWeight.bold)),
                                           Text(userProvider.email, style: TextStyle(color: Colors.white70, fontSize: AppTextSizes.mediumText)),
+                                          Text("+91 ${userProvider.phoneNo}", style: TextStyle(color: Colors.white70, fontSize: AppTextSizes.mediumText)),
                                           SizedBox(height: 6),
                                           Container(
                                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),

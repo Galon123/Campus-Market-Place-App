@@ -38,8 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
             content: Text("Login Successfull...")
           )
         );
-
         await userProvider.refreshUsername();
+
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontWeight: FontWeight.w600
                       ),),
                       TextButton(
-                        onPressed: () => Navigator.pushReplacementNamed(context, '/register'), 
+                        onPressed: () => Navigator.pushNamed(context, '/register'), 
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           minimumSize: Size(0, 0),

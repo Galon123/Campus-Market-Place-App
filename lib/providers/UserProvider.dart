@@ -6,25 +6,32 @@ class UserProvider extends ChangeNotifier{
 
   String _username = "Guest";
   String _email = "";
+  String _phoneNo = "";
   double _rating = 0.0;
 
   bool _isLoading = false;
   bool _isUserLoading = false;
+
+  bool _isLoggedIn = false;
 
   List<dynamic> _products = [];
 
   //Getters
   String get username => _username;
   String get email => _email;
+  String get phoneNo => _phoneNo;
   double get rating => _rating;
 
   bool get isLoading => _isLoading;
   bool get isUserLoading => _isUserLoading;
+
+  bool get isLoggedIn => _isLoggedIn;
   
   List<dynamic> get products => _products;
 
   UserProvider({bool initialLoginState = false}){
     if(initialLoginState){
+      _isLoggedIn = true;
       refreshUsername();
     }
   }
@@ -39,8 +46,9 @@ class UserProvider extends ChangeNotifier{
       }));
 
       if(response.statusCode == 200){
-        refreshUsername();
+        _isLoggedIn = true;
         notifyListeners();
+        await refreshUsername();
         return true;
       }
       return false;
@@ -63,7 +71,9 @@ class UserProvider extends ChangeNotifier{
       if(response.statusCode == 200){
         _username = response.data['username'];
         _email = response.data['email'];
+        _phoneNo = response.data['phone_no'];
         _rating = response.data['rating'];
+        notifyListeners();
       }
     } catch(e){
       debugPrint("Error Refreshing Username : $e");
@@ -73,25 +83,18 @@ class UserProvider extends ChangeNotifier{
 
   }
 
-  Future<void> logout() async{
-    _setLoading(true);
-    try{
+  Future<void> logout() async {
+    try {
       await Apiclient.dio.post('/logout');
-    }
-    catch(e){
+    } catch(e) {
       debugPrint("Error in logout...");
+    } finally {
+      _isLoggedIn = false;
+      _username = "Guest";
+      _products = [];
+      Apiclient.cookieJar.deleteAll();
+      notifyListeners();
     }
-    finally{
-      _performLocalCleanup();
-      _setLoading(false);
-    }
-  }
-
-  void _performLocalCleanup(){
-    _username = "Guest";
-    _products = [];
-    Apiclient.cookieJar.deleteAll();
-    notifyListeners();
   }
 
   void _setLoading(bool value){

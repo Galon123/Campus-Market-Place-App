@@ -35,13 +35,15 @@ class MarketplaceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final userProvider = context.watch<UserProvider>();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: userProvider.username == "Guest"
-      ? const LoginScreen()
-      : MainNavigationHub()
+      home: Consumer<UserProvider>(
+        builder: (context, userProvider, _) {
+          return userProvider.isLoggedIn 
+          ? const MainNavigationHub()
+          : const LoginScreen();
+        }
+      )
       ,
       routes: {
         '/login' : (context) => const LoginScreen(),
