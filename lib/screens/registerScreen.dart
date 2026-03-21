@@ -1,5 +1,7 @@
 import 'package:e_commerce_refactor/constants.dart';
+import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -18,11 +20,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  bool _isLoading = false;
   bool _isPassVisible = true;
   bool _isConfirmPassVisible = false;
 
+
   @override
   Widget build(BuildContext context) {
+    
+    Future<void> handleRegister() async{
+
+      if(!_formkey.currentState!.validate()) return;
+
+      setState(() => _isLoading=true);
+
+      try{
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+        bool success = await userProvider.register(_usernameController.text.trim(), _emailController.text, _phoneNoController.text, _passwordController.text);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: success ? Text("Registered Successfully, Please Login....") : Text("Username or Email or Phone Number already registered")));
+        Navigator.of(context).popUntil((route)=>route.isFirst);
+
+      } catch(e) {
+        debugPrint("Error in Registering : $e");
+      } finally {
+        setState(() => _isLoading = false);
+      }
+    }
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -57,8 +83,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fillColor: AppColors.textColorDefault
                             ),
                             validator: (value)  {
-                              value!.isEmpty ? "Required" : null;
-                              value.length < 3 ? "Too Short" : null;
+                              if(value!.isEmpty) return "Required";
+                              if(value.length < 3 || value.length > 20) return "Username has to be between 3 ans 20 characters";
+                              return null;
                             },
                           ),
                           const SizedBox(height: 30,),
@@ -73,8 +100,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fillColor: AppColors.textColorDefault
                             ),
                             validator: (value)  {
-                              value!.isEmpty ? "Required" : null;
-                              !value.toLowerCase().endsWith("@gectcr.ac.in") ? "Must be a Valid College E-mail" : null;
+                              if(value!.isEmpty) return "Required";
+                              if(!value.toLowerCase().endsWith("@gectcr.ac.in")) return "Must be a College registered E-mail";
+                              return null;
                             },
                           ),
                           const SizedBox(height: 30,),
@@ -89,8 +117,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fillColor: AppColors.textColorDefault
                             ),
                             validator: (value)  {
-                              value!.isEmpty ? "Required" : null;
-                              value.length != 10 ? "Invalid Phone number" : null;
+                              if(value!.isEmpty) return "Required";
+                              if(value.length != 10) return "Invalid Phone Number";
+                              return null;
                             },
                           ),
                           const SizedBox(height: 30,),
@@ -111,10 +140,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               )
                             ),
                             validator: (value)  {
-                              value!.isEmpty ? "Required" : null;
-                              !value.contains(RegExp(r'[A-Z]')) ? "One UpperCase Character Required" : null;
-                              !value.contains(RegExp(r'[a-z]')) ? "One LowerCase Character Required" : null;
-                              !value.contains(RegExp(r'[0-9]')) ? "One Number Required" : null;
+                              if(value!.isEmpty) return "Required";
+                              if(!value.contains(RegExp(r'[A-Z]'))) return "Must have an UpperCase character";
+                              if(!value.contains(RegExp(r'[a-z]'))) return "Must have a LowerCase character";
+                              if(!value.contains(RegExp(r'[0-9]'))) return "Must have a Number";
+                              return null;
                             },
                           ),
                           const SizedBox(height: 30,),
@@ -135,8 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               )
                             ),
                             validator: (value)  {
-                              value!.isEmpty ? "Required" : null;
-                              value != _passwordController.text ? "Must Be Same as Password" : null;
+                              if(value!.isEmpty) return "Required";
+                              if(value != _passwordController.text) return "Must be the same as Password";
+                              return null;
                             },
                           ),
                           const SizedBox(height: 40,),
@@ -146,12 +177,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryColor, elevation: 4),
-                              onPressed: () => {}, 
-                              child: Text("Register", style: TextStyle(
-                                fontSize: AppTextSizes.subHeadings,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white
-                              ),)
+                              onPressed: _isLoading ? null : handleRegister, 
+                              child: _isLoading  
+                              ? CircularProgressIndicator(color: Colors.white,)
+                              : Text("Register", style: TextStyle(
+                                  fontSize: AppTextSizes.subHeadings,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white
+                                ),)
                             ),
                           ),
 
@@ -190,10 +223,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  // Future<void> _handleRegister(){
-
-  // }
-
-
 }

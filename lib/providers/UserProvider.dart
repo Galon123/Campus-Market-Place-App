@@ -37,6 +37,30 @@ class UserProvider extends ChangeNotifier{
   }
 
 
+  Future<bool> register(String user, String email, String phoneNo, String password) async{
+    _setLoading(true);
+    try{
+      final regResponse = await Apiclient.dio.post('/register', 
+      data: {
+        'username':user,
+        'email': email,
+        'phone_no': phoneNo,
+        'password': password 
+      }
+    );
+
+    if(regResponse.statusCode == 200){
+      return true;
+    }
+    return false;
+    } catch(e) {
+      debugPrint("Error in Registering");
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   Future<bool> login(String user, String pass) async{
     _setLoading(true);
     try{
