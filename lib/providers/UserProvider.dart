@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:e_commerce_refactor/models/Product.dart';
 import 'package:e_commerce_refactor/services/ApiClient.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,20 @@ class UserProvider extends ChangeNotifier{
 
   bool _isLoading = false;
   bool _isUserLoading = false;
+  bool _isProductLoading = false;
+  bool _isBidsLoading = false;
 
   bool _isLoggedIn = false;
 
-  List<dynamic> _products = [];
+  List<Product> _products = [];
+  bool _hasMoreProducts = true;
+  int _productSkip = 0;
+  final int _productLimit = 10;
+
+  List<dynamic> _bids = [];
+  bool _hasMoreBids = true;
+  int _bidsSkip = 0;
+  final int _bidsLimit = 10;
 
   //Getters
   String get username => _username;
@@ -24,10 +35,16 @@ class UserProvider extends ChangeNotifier{
 
   bool get isLoading => _isLoading;
   bool get isUserLoading => _isUserLoading;
+  bool get isProductLoading => _isProductLoading;
+  bool get isBidsLoading => _isBidsLoading;  
 
   bool get isLoggedIn => _isLoggedIn;
   
-  List<dynamic> get products => _products;
+  List<Product> get products => List.unmodifiable(_products);
+  bool get hasMoreProducts => _hasMoreProducts;
+
+  List<dynamic> get bids => List.unmodifiable(_bids);
+  bool get hasMoreBids => _hasMoreBids;
 
   UserProvider({bool initialLoginState = false}){
     if(initialLoginState){
@@ -38,7 +55,8 @@ class UserProvider extends ChangeNotifier{
 
 
   Future<bool> register(String user, String email, String phoneNo, String password) async{
-    _setLoading(true);
+    _isLoading = true;
+    notifyListeners();
     try{
       final regResponse = await Apiclient.dio.post('/register', 
       data: {
@@ -57,12 +75,14 @@ class UserProvider extends ChangeNotifier{
       debugPrint("Error in Registering");
       return false;
     } finally {
-      _setLoading(false);
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
   Future<bool> login(String user, String pass) async{
-    _setLoading(true);
+    _isLoading = true;
+    notifyListeners();
     try{
       final response = await Apiclient.dio.post('/login',data:FormData.fromMap({
         "username" : user,
@@ -82,12 +102,14 @@ class UserProvider extends ChangeNotifier{
       return false;
     }
     finally{
-      _setLoading(false);
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
   Future<void> refreshUsername() async{
-    _setUserLoading(true);
+    _isUserLoading = true;
+    notifyListeners();
 
     try{
       final response = await Apiclient.dio.get('/me');
@@ -102,7 +124,8 @@ class UserProvider extends ChangeNotifier{
     } catch(e){
       debugPrint("Error Refreshing Username : $e");
     } finally{
-      _setUserLoading(false);
+      _isUserLoading = false;
+      notifyListeners();
     }
 
   }
@@ -111,24 +134,91 @@ class UserProvider extends ChangeNotifier{
     try {
       await Apiclient.dio.post('/logout');
     } catch(e) {
-      debugPrint("Error in logout...");
+      debugPrint("Error in logout...Logging Out Anyway....");
     } finally {
       _isLoggedIn = false;
       _username = "Guest";
+      _email = "";
+      _phoneNo = "";
+      _rating = 0.0;
+
       _products = [];
+      _productSkip =0;
+
+      _bids = [];
+      _bidsSkip = 0;
+            
       Apiclient.cookieJar.deleteAll();
       notifyListeners();
     }
   }
 
-  void _setLoading(bool value){
-    _isLoading = value;
+  Future<void> fetchProducts() async{
+
+    if(_isProductLoading || !hasMoreProducts) return;
+
+    _isProductLoading = true;
     notifyListeners();
+
+    try{
+      final response = await Apiclient.dio.get('/items/feed?skip=$_productSkip&limit=$_productLimit');
+
+      if(response.statusCode == 200){
+        final List<dynamic> data = response.data ;
+        
+        if (data.isEmpty) {
+          _hasMoreProducts = false;
+        } else {
+          final List<Product> newItems = data.map((json) => Product.fromJson(json)).toList();
+          _products.addAll(newItems);
+          _productSkip += _productLimit;
+          if(data.length < _productLimit){
+            _hasMoreProducts = false;
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error Fetching data : $e");
+      _hasMoreProducts = false;
+    } finally{
+      _isProductLoading = false;
+      notifyListeners();
+    }
+
   }
 
-  void _setUserLoading(bool value){
-    _isUserLoading = value;
+  Future<void> fetchBids() async{
+
+    if(_isBidsLoading || !hasMoreBids) return;
+
+    _isBidsLoading = true;
     notifyListeners();
+
+    try{
+      final response = await Apiclient.dio.get('/items/bided_items?skip=$_bidsSkip&limit=$_bidsLimit');
+
+      if(response.statusCode == 200){
+        final List<dynamic> data = response.data;
+        
+        if (data.isEmpty) {
+          _hasMoreBids = false;
+        } else {
+          final List<dynamic> newBids = data.map((json) => Product.fromJson(json)).toList();
+          _bids.addAll(newBids);
+          _bidsSkip += _bidsLimit;
+          if(data.length < _bidsLimit){
+            _hasMoreBids = false;
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error Fetching data : $e");
+      _hasMoreBids = false;
+    } finally{
+      _isBidsLoading = false;
+      notifyListeners();
+    }
+
   }
 
 }

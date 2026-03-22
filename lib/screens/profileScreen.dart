@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               _statItem(value: userProvider.products.length.toString(), field: "Listings"),
-                              _statItem(value: "1", field: "Bids"),
+                              _statItem(value: userProvider.bids.length.toString(), field: "Bids"),
                               _statItem(value: userProvider.rating.toString(), field: "Rating")
                             ],
                           ),
