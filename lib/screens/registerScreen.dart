@@ -57,15 +57,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.account_circle, size: 100,color: AppColors.textComplemtaryColor,),
+              Icon(Icons.account_circle, size: 80,color: AppColors.textComplemtaryColor,),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Text("Create Account", style: TextStyle(
-                  fontSize: AppTextSizes.largeText,
+                  fontSize: AppTextSizes.mainHeadings,
                   fontWeight: FontWeight.w700
                 ),),
               ),
-              const SizedBox(height: 30,),
+              const SizedBox(height: 10,),
               Expanded(
                 child: ListView(
                   children: [
@@ -88,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 30,),
+                          const SizedBox(height: 20,),
                           TextFormField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -105,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 30,),
+                          const SizedBox(height: 20,),
                           TextFormField(
                             controller: _phoneNoController,
                             keyboardType: TextInputType.number,
@@ -122,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 30,),
+                          const SizedBox(height: 20,),
                           TextFormField(
                             controller: _passwordController,
                             obscureText: !_isPassVisible,
@@ -147,7 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 30,),
+                          const SizedBox(height: 20,),
                           TextFormField(
                             controller: _confirmPasswordController,
                             obscureText: !_isConfirmPassVisible,
@@ -170,52 +170,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 40,),
+                          const SizedBox(height: 30,),
                           
-                          SizedBox(
-                            height: 50,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryColor, elevation: 4),
-                              onPressed: _isLoading ? null : handleRegister, 
-                              child: _isLoading  
-                              ? CircularProgressIndicator(color: Colors.white,)
-                              : Text("Register", style: TextStyle(
-                                  fontSize: AppTextSizes.subHeadings,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white
-                                ),)
-                            ),
-                          ),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Already Have an Account ? ", style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontSize: AppTextSizes.mediumText
-                              ),),
-                              TextButton(
-                                onPressed: () {Navigator.of(context).popUntil((route)=>route.isFirst);}, 
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: Size(0, 0),
-                                  tapTargetSize: MaterialTapTargetSize.padded
-                                ),
-                                child: Text("Login", style: TextStyle(
-                                  color: Colors.blue,
-                                  fontStyle: FontStyle.italic,
-                                  decoration: TextDecoration.underline
-                                ),)
-                              )
-                            ],
-                          )
-
                         ],
                       )
-                    )
+                    ),
                   ],
                 )
+              ),
+              SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryColor, elevation: 4),
+                  onPressed: _isLoading ? null : handleRegister, 
+                  child: _isLoading  
+                  ? CircularProgressIndicator(color: Colors.white,)
+                  : Text("Register", style: TextStyle(
+                      fontSize: AppTextSizes.subHeadings,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white
+                    ),)
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already Have an Account ?", style: TextStyle(
+                    color: AppColors.textComplemtaryColor,
+                    fontStyle: FontStyle.italic,
+                    fontSize: AppTextSizes.smallText,
+                    fontWeight: FontWeight.w600
+                  ),),
+                  TextButton(
+                    onPressed: () {Navigator.of(context).popUntil((route)=>route.isFirst);}, 
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.padded
+                    ),
+                    child: Text("Login", style: TextStyle(
+                      color: Colors.blueAccent.shade400,
+                      fontStyle: FontStyle.italic,
+                      fontSize: AppTextSizes.smallText,
+                      decoration: TextDecoration.underline
+                    ),)
+                  )
+                ],
               )
             ],
           ),

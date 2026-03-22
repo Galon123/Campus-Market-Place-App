@@ -18,10 +18,10 @@ class AppColors{
 
 class AppTextSizes{
 
-  static const double smallText = 12.0;
-  static const double mediumText = 16.0;
-  static const double subHeadings = 24.0;
-  static const double mainHeadings = 32.0;
-
-  static const double largeText = 40.0; 
+  static const double verySmallText = 12.0;
+  static const double smallText = 15.0;
+  static const double mediumText = 18.0;
+  static const double subHeadings = 21.0;
+  static const double largeText = 24.0; 
+  static const double mainHeadings = 30.0;
 }

@@ -43,11 +43,11 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
         child: ClipRRect(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           child: NavigationBar(
-            height: 75,
+            height: 65,
             elevation: 4,
             shadowColor: Colors.black,
             backgroundColor: Colors.indigo.shade100,
-            indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10.0)),
+            indicatorShape: RoundedRectangleBorder( side: BorderSide(width: 1, strokeAlign: BorderSide.strokeAlignOutside),borderRadius: BorderRadiusGeometry.circular(10.0)),
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
             selectedIndex: _currentIndex,
             onDestinationSelected: (int index) {

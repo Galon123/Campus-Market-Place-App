@@ -58,12 +58,21 @@ class MarketplaceApp extends StatelessWidget {
           labelTextStyle: WidgetStateProperty.resolveWith((state) {
             if(state.contains(WidgetState.selected)){
               return TextStyle(
-                fontSize: AppTextSizes.mediumText,
+                fontSize: AppTextSizes.verySmallText,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textComplemtaryColor
               );
-            }
-          })
+            } else {return null;}
+          }),
+          iconTheme: WidgetStateProperty.resolveWith((state) {
+            if(state.contains(WidgetState.selected)){
+              return IconThemeData(
+                size: 30,
+                color: AppColors.primaryColor
+              );
+            } else {return null;}
+          }),
+          indicatorColor: Colors.indigo.shade200
         )
       ),
     );

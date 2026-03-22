@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ), 
         child: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(24.0),
+            padding: EdgeInsets.all(20.0),
             child: Form(
               key: _formkey,
               child: Column(
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 20,),
                   const Text("Campus MarketPlace", style: TextStyle(
                     color: AppColors.textComplemtaryColor,
-                    fontSize: AppTextSizes.largeText,
+                    fontSize: AppTextSizes.mainHeadings,
                     fontWeight: FontWeight.bold
                   ),),
                   const SizedBox(height: 30),
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor, 
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(8.0),
                         elevation: 10
                       ),
                       onPressed: _isLoading ? null : handleLogin, 
@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text("Don't Have an account? ", style: TextStyle(
                         color: AppColors.textComplemtaryColor,
                         fontStyle: FontStyle.italic,
-                        fontSize: AppTextSizes.mediumText,
+                        fontSize: AppTextSizes.smallText,
                         fontWeight: FontWeight.w600
                       ),),
                       TextButton(
@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         child: Text("Register", style: TextStyle(
                           color: Colors.blueAccent.shade400,
-                          fontSize: AppTextSizes.mediumText,
+                          fontSize: AppTextSizes.smallText,
                           fontStyle: FontStyle.italic,
                           decoration: TextDecoration.underline
                         ),)
