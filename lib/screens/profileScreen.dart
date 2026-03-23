@@ -1,4 +1,4 @@
-import 'package:e_commerce_refactor/constants.dart';
+import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

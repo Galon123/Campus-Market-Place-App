@@ -1,5 +1,5 @@
-import 'package:e_commerce_refactor/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
+import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,16 +62,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final colors = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
     
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.gradientColor1, AppColors.gradientColor2],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight
-          )
-        ), 
         child: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(20.0),
@@ -80,10 +76,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.school, color: AppColors.textComplemtaryColor, size: 90,),
+                  Icon(Icons.school, color: colors.secondary, size: 90,),
                   const SizedBox(height: 20,),
-                  const Text("Campus MarketPlace", style: TextStyle(
-                    color: AppColors.textComplemtaryColor,
+                  Text("Campus MarketPlace", style: TextStyle(
+                    color: colors.secondary,
                     fontSize: AppTextSizes.mainHeadings,
                     fontWeight: FontWeight.bold
                   ),),
@@ -96,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
                       prefixIcon: Icon(Icons.person),
                       filled: true,
-                      fillColor: AppColors.gradientColor2,
+                      fillColor: colors.surface,
                     ),
                     validator: (value) => value!.isEmpty ? "Username cannot be empty" : null,
                   ),
@@ -109,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
                       prefixIcon: Icon(Icons.lock),
                       filled: true,
-                      fillColor: AppColors.gradientColor2,
+                      fillColor: colors.surface,
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isPasswordVisible ? Icons.visibility : Icons.visibility_off
@@ -125,18 +121,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor, 
+                        backgroundColor: colors.primary, 
                         padding: EdgeInsets.all(8.0),
                         elevation: 10
                       ),
                       onPressed: _isLoading ? null : handleLogin, 
                       child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white,)
-                      : const Text("Login", style: TextStyle(
-                        color: AppColors.textColorDefault,
-                        fontSize: AppTextSizes.subHeadings,
-                        fontWeight: FontWeight.bold
-                      ),)
+                      : Text("Login", style: text.titleMedium)
                     ),
                   ),
                   const SizedBox(height: 5,),
@@ -144,12 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Don't Have an account? ", style: TextStyle(
-                        color: AppColors.textComplemtaryColor,
-                        fontStyle: FontStyle.italic,
-                        fontSize: AppTextSizes.smallText,
-                        fontWeight: FontWeight.w600
-                      ),),
+                      Text("Don't Have an account? ", style: text.bodyMedium),
                       TextButton(
                         onPressed: () => Navigator.pushNamed(context, '/register'), 
                         style: TextButton.styleFrom(
@@ -157,12 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           minimumSize: Size(0, 0),
                           tapTargetSize: MaterialTapTargetSize.padded
                         ),
-                        child: Text("Register", style: TextStyle(
-                          color: Colors.blueAccent.shade400,
-                          fontSize: AppTextSizes.smallText,
-                          fontStyle: FontStyle.italic,
-                          decoration: TextDecoration.underline
-                        ),)
+                        child: Text("Register", style: text.labelMedium)
                       )
                     ],
                   )

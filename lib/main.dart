@@ -1,4 +1,6 @@
-import 'package:e_commerce_refactor/constants.dart';
+import 'package:e_commerce_refactor/providers/ThemeProvider.dart';
+import 'package:e_commerce_refactor/theme/AppTheme.dart';
+import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:e_commerce_refactor/screens/bidScreen.dart';
 import 'package:e_commerce_refactor/screens/feedScreen.dart';
@@ -20,9 +22,8 @@ void main() async{
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => UserProvider(initialLoginState: sessionExists) 
-        )
+        ChangeNotifierProvider(create: (_) => UserProvider(initialLoginState: sessionExists)),
+        ChangeNotifierProvider(create: (_) => ThemeProvider())
       ],
       child: const MarketplaceApp(),
     )
@@ -34,6 +35,8 @@ class MarketplaceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = context.watch<ThemeProvider>();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -52,29 +55,9 @@ class MarketplaceApp extends StatelessWidget {
         '/mybids' : (context) => const MyBids(),
         '/mylistings' : (context) => const MyListings()
       },
-      theme: ThemeData(
-        useMaterial3: true,
-        navigationBarTheme: NavigationBarThemeData(
-          labelTextStyle: WidgetStateProperty.resolveWith((state) {
-            if(state.contains(WidgetState.selected)){
-              return TextStyle(
-                fontSize: AppTextSizes.verySmallText,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textComplemtaryColor
-              );
-            } else {return null;}
-          }),
-          iconTheme: WidgetStateProperty.resolveWith((state) {
-            if(state.contains(WidgetState.selected)){
-              return IconThemeData(
-                size: 30,
-                color: AppColors.primaryColor
-              );
-            } else {return null;}
-          }),
-          indicatorColor: Colors.indigo.shade200
-        )
-      ),
+      theme: Apptheme.light,
+      darkTheme: Apptheme.dark,
+      themeMode: themeProvider.themeMode,
     );
   }
 }
