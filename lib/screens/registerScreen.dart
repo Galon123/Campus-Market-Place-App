@@ -49,6 +49,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
 
+    final colors = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -57,15 +60,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.account_circle, size: 80,color: AppColors.textComplemtaryColor,),
+              Icon(Icons.account_circle, size: 80,),
               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text("Create Account", style: TextStyle(
-                  fontSize: AppTextSizes.mainHeadings,
-                  fontWeight: FontWeight.w700
-                ),),
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Create Account", style: text.titleLarge),
               ),
-              const SizedBox(height: 10,),
               Expanded(
                 child: ListView(
                   children: [
@@ -80,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: "Username",
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                               filled: true,
-                              fillColor: AppColors.textColorDefault
+                              fillColor: colors.surface
                             ),
                             validator: (value)  {
                               if(value!.isEmpty) return "Required";
@@ -88,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(height: 15,),
                           TextFormField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -97,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: "E-Mail",
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                               filled: true,
-                              fillColor: AppColors.textColorDefault
+                              fillColor: colors.surface
                             ),
                             validator: (value)  {
                               if(value!.isEmpty) return "Required";
@@ -105,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(height: 15,),
                           TextFormField(
                             controller: _phoneNoController,
                             keyboardType: TextInputType.number,
@@ -114,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: "Phone Number",
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                               filled: true,
-                              fillColor: AppColors.textColorDefault
+                              fillColor: colors.surface
                             ),
                             validator: (value)  {
                               if(value!.isEmpty) return "Required";
@@ -122,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(height: 15,),
                           TextFormField(
                             controller: _passwordController,
                             obscureText: !_isPassVisible,
@@ -131,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: "Password",
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                               filled: true,
-                              fillColor: AppColors.textColorDefault,
+                              fillColor: colors.surface,
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _isPassVisible ? Icons.visibility : Icons.visibility_off
@@ -147,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(height: 15,),
                           TextFormField(
                             controller: _confirmPasswordController,
                             obscureText: !_isConfirmPassVisible,
@@ -156,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: "Confirm Password",
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                               filled: true,
-                              fillColor: AppColors.textColorDefault,
+                              fillColor: colors.surface,
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _isConfirmPassVisible ? Icons.visibility : Icons.visibility_off
@@ -170,7 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 30,),
+                          const SizedBox(height: 15,),
                           
                         ],
                       )
@@ -182,26 +181,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 50,
                 width: double.infinity,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryColor, elevation: 4),
+                  style: ElevatedButton.styleFrom(backgroundColor: colors.primary, elevation: 4),
                   onPressed: _isLoading ? null : handleRegister, 
                   child: _isLoading  
                   ? CircularProgressIndicator(color: Colors.white,)
-                  : Text("Register", style: TextStyle(
-                      fontSize: AppTextSizes.subHeadings,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white
-                    ),)
+                  : Text("Register", style: text.titleSmall)
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already Have an Account ?", style: TextStyle(
-                    color: AppColors.textComplemtaryColor,
-                    fontStyle: FontStyle.italic,
-                    fontSize: AppTextSizes.smallText,
-                    fontWeight: FontWeight.w600
-                  ),),
+                  Text("Already Have an Account ?", style: text.bodyMedium),
                   TextButton(
                     onPressed: () {Navigator.of(context).popUntil((route)=>route.isFirst);}, 
                     style: TextButton.styleFrom(

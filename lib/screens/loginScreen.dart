@@ -76,13 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.school, color: colors.secondary, size: 90,),
+                  Icon(Icons.school, size: 90,),
                   const SizedBox(height: 20,),
-                  Text("Campus MarketPlace", style: TextStyle(
-                    color: colors.secondary,
-                    fontSize: AppTextSizes.mainHeadings,
-                    fontWeight: FontWeight.bold
-                  ),),
+                  Text("Campus MarketPlace", style: text.titleLarge),
                   const SizedBox(height: 30),
 
                   TextFormField(
@@ -128,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: _isLoading ? null : handleLogin, 
                       child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white,)
-                      : Text("Login", style: text.titleMedium)
+                      : Text("Login", style: text.titleSmall)
                     ),
                   ),
                   const SizedBox(height: 5,),
@@ -144,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           minimumSize: Size(0, 0),
                           tapTargetSize: MaterialTapTargetSize.padded
                         ),
-                        child: Text("Register", style: text.labelMedium)
+                        child: Text("Register", style: TextStyle(color: Colors.blueAccent.shade200, decoration: TextDecoration.underline),)
                       )
                     ],
                   )

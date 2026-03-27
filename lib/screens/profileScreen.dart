@@ -1,3 +1,4 @@
+import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final colors = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
     final userProvider = Provider.of<UserProvider>(context, listen:true);
     return Scaffold(
             body: SingleChildScrollView(
@@ -68,8 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             child: Row(
                                               children: [
-                                                Icon(Icons.verified,color: AppColors.positiveTextColor, size:16,),
-                                                Text('Verified Student', style: TextStyle(color: AppColors.textColorDefault, fontSize: AppTextSizes.verySmallText)),
+                                                Icon(Icons.verified,color: colors.success, size:16,),
+                                                Text('Verified Student', style: TextStyle(color: Colors.black, fontSize: AppTextSizes.verySmallText)),
                                               ],
                                             ),
                                           ),
@@ -92,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: EdgeInsets.all(12.0),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [AppColors.primaryColor, AppColors.secondaryColor],
+                              colors: [colors.primary, colors.secondary],
                               begin: AlignmentGeometry.topCenter,
                               end: AlignmentGeometry.bottomCenter
                             ),
@@ -105,9 +109,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              _statItem(value: userProvider.products.length.toString(), field: "Listings"),
-                              _statItem(value: userProvider.bids.length.toString(), field: "Bids"),
-                              _statItem(value: userProvider.rating.toString(), field: "Rating")
+                              _statItem(value: userProvider.products.length.toString(), field: "Listings",colors: colors ),
+                              _statItem(value: userProvider.bids.length.toString(), field: "Bids",colors: colors),
+                              _statItem(value: userProvider.rating.toString(), field: "Rating",colors: colors)
                             ],
                           ),
                         )
@@ -115,9 +119,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 60,),
-                  _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => { widget.onNavigate(2) },),
-                  _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1) }),
-                  _buildCard(icon: Icons.logout, title: "Logout", onTap: userProvider.logout)
+                  _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => { widget.onNavigate(2)}, colors: colors),
+                  _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1)}, colors: colors),
+                  _buildCard(icon: Icons.logout, title: "Logout", onTap: userProvider.logout,colors: colors)
                   
                 ],
               ),
@@ -125,13 +129,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
   }
 
-  Widget _buildCard({required IconData icon, required String title, String? subtitle, required VoidCallback onTap}){
+  Widget _buildCard({required IconData icon, required String title, String? subtitle, required VoidCallback onTap, ColorScheme ?colors}){
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.primaryColor, AppColors.secondaryColor],
+          colors: [colors!.primary, colors.primary],
           begin: AlignmentGeometry.topCenter,
           end: AlignmentGeometry.bottomCenter
         ),
@@ -141,22 +145,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ]
       ),
       child: ListTile(
-        leading: Icon(icon, color: AppColors.textColorDefault,size: 28,),
+        leading: Icon(icon, color: colors.primary,size: 28,),
         title: Text(title, style: TextStyle(
           fontWeight: FontWeight.w700,
-          color: AppColors.textColorDefault
+          color: Colors.black
         ),),
         subtitle: subtitle != null ? Text(subtitle, style: TextStyle(
           fontSize: AppTextSizes.verySmallText,
-          color: AppColors.textColorDefault
+          color: Colors.black
         ),) : null,
-        trailing: Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.textColorDefault,),
+        trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black,),
         onTap: onTap,
       ),
     );
   }
 
-  Widget _statItem({required String value, required String field}){
+  Widget _statItem({required String value, required String field, ColorScheme ?colors}){
 
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -165,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Text(value, style: TextStyle(
                 fontSize: AppTextSizes.smallText,
-                color: AppColors.textColorDefault,
+                color: Colors.black,
                 fontWeight: FontWeight.w700
               ),),
               field == "Rating" ? Icon(Icons.star, color: Colors.amber,) : const SizedBox.shrink()
@@ -174,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: 5,),
           Text(field, style: TextStyle(
                 fontSize: AppTextSizes.smallText,
-                color: AppColors.textColorDefault,
+                color: Colors.black,
                 fontWeight: FontWeight.w700
               ),)
         ],

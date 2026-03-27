@@ -19,13 +19,15 @@ class Apptheme {
       onError: Colors.white
     ),
     textTheme: const TextTheme(
-      labelMedium: TextStyle(color: LightModeColor.textSecondary),
-      titleLarge: TextStyle(color: LightModeColor.textPrimary),
-      titleMedium: TextStyle(color: LightModeColor.textSecondary),
-      titleSmall: TextStyle(color: LightModeColor.textMuted),
-      bodyLarge: TextStyle(color: LightModeColor.textPrimary),
-      bodyMedium: TextStyle(color: LightModeColor.textSecondary),
-      bodySmall: TextStyle(color: LightModeColor.textMuted)
+      titleLarge: TextStyle(color: LightModeColor.textPrimary,fontWeight: FontWeight.bold, fontSize: 32),
+      titleMedium: TextStyle(color: LightModeColor.textSecondary,fontWeight: FontWeight.bold, fontSize: 28),
+      titleSmall: TextStyle(color: LightModeColor.textMuted,fontWeight: FontWeight.bold, fontSize: 24),
+      bodyLarge: TextStyle(color: LightModeColor.textPrimary, fontSize: 20),
+      bodyMedium: TextStyle(color: LightModeColor.textSecondary, fontSize: 16),
+      bodySmall: TextStyle(color: LightModeColor.textMuted, fontSize: 12)
+    ),
+    iconTheme: const IconThemeData(
+      color: LightModeColor.brand
     )
   );
 
@@ -44,10 +46,16 @@ class Apptheme {
       onError: Colors.white,
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: DarkModeColor.textPrimary),
-      bodyMedium: TextStyle(color: DarkModeColor.textSecondary),
-      bodySmall: TextStyle(color: DarkModeColor.textMuted),
+      titleLarge: TextStyle(color: DarkModeColor.textPrimary,fontWeight: FontWeight.bold, fontSize: 32),
+      titleMedium: TextStyle(color: DarkModeColor.textSecondary,fontWeight: FontWeight.bold, fontSize: 28),
+      titleSmall: TextStyle(color: DarkModeColor.textMuted,fontWeight: FontWeight.bold, fontSize: 24),
+      bodyLarge: TextStyle(color: DarkModeColor.textPrimary, fontSize: 20),
+      bodyMedium: TextStyle(color: DarkModeColor.textSecondary, fontSize: 16),
+      bodySmall: TextStyle(color: DarkModeColor.textMuted, fontSize: 12),
     ),
+    iconTheme: const IconThemeData(
+      color: LightModeColor.subtle
+    )
   );
 }
 
