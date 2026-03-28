@@ -39,7 +39,9 @@ class Apptheme {
     colorScheme: const ColorScheme.dark(
       primary: DarkModeColor.brand,
       secondary: DarkModeColor.subtle,
-      surface: DarkModeColor.lowBackground,
+      surfaceBright: DarkModeColor.lowBackground,
+      surface: DarkModeColor.midBackground,
+      surfaceDim: DarkModeColor.highBackground,
       error: DarkModeColor.errorColor,
       onPrimary: DarkModeColor.textPrimary,
       onSurface: DarkModeColor.textPrimary,

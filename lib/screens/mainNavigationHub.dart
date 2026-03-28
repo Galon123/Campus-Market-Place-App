@@ -1,6 +1,8 @@
 import 'package:e_commerce_refactor/screens/bidScreen.dart';
+import 'package:e_commerce_refactor/screens/createListing.dart';
 import 'package:e_commerce_refactor/screens/feedScreen.dart';
 import 'package:e_commerce_refactor/screens/listingScreen.dart';
+import 'package:e_commerce_refactor/screens/notificationScreen.dart';
 import 'package:e_commerce_refactor/screens/profileScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +25,8 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
 
   late final List<Widget> _pages =[
     FeedScreen(),
-    MyBids(),
-    MyListings(),
+    CreateListing(),
+    NotificationScreen(),
     ProfileScreen(onNavigate : _navigateTo)
   ];
 
@@ -67,14 +69,14 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
                   label: "Feed"
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.gavel_outlined), 
-                  selectedIcon: Icon(Icons.gavel, color: colors.primary),
-                  label: "My Bids"
+                  icon: Icon(Icons.add_outlined), 
+                  selectedIcon: Icon(Icons.add, color: colors.primary),
+                  label: "Create"
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.book_outlined), 
-                  selectedIcon: Icon(Icons.book, color: colors.primary),
-                  label: "My Listings"
+                  icon: Icon(Icons.notifications), 
+                  selectedIcon: Icon(Icons.notifications_active, color: colors.primary),
+                  label: "Notifications"
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.person_2_outlined), 
