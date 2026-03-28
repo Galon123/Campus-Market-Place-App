@@ -1,4 +1,5 @@
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
+import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -124,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: _isLoading ? null : handleLogin, 
                       child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white,)
-                      : Text("Login", style: text.titleSmall)
+                      : Text("Login", style: context.buttonText)
                     ),
                   ),
                   const SizedBox(height: 5,),

@@ -1,3 +1,4 @@
+import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:flutter/material.dart';
@@ -185,7 +186,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: _isLoading ? null : handleRegister, 
                   child: _isLoading  
                   ? CircularProgressIndicator(color: Colors.white,)
-                  : Text("Register", style: text.titleSmall)
+                  : Text("Register", style: context.buttonText)
                 ),
               ),
               Row(

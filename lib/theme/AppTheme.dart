@@ -70,3 +70,12 @@ extension AppColorScheme on ColorScheme {
     : LightModeColor.warningColor;
 
 }
+
+extension AppTextTheme on BuildContext {
+
+  TextStyle get buttonText => TextStyle(
+    color: Theme.of(this).colorScheme.secondary,
+    fontSize: 24,
+    fontWeight: FontWeight.w600
+  );
+}

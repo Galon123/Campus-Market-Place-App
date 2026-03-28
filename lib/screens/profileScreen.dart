@@ -31,7 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ClipPath(
                         clipper: HeaderClipper(),
                         child: Container(
-                          height: 300,
+                          height: 330,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [Color(0xFF283593), Color(0xFF7986CB)],
@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   // top bar
                                   Text('My Profile', style: TextStyle(color: Colors.white, fontSize: AppTextSizes.mainHeadings, fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 24),
+                                  SizedBox(height: 12),
 
                                   Row(
                                     children: [
@@ -89,21 +89,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
 
                       Positioned(
-                        bottom: -30,
+                        bottom: 0,
                         left: 15,
                         right: 15,
                         child: Container(
-                          padding: EdgeInsets.all(12.0),
+                          padding: EdgeInsets.all(18.0),
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [colors.primary, colors.secondary],
-                              begin: AlignmentGeometry.topCenter,
-                              end: AlignmentGeometry.bottomCenter
-                            ),
-                            color: Colors.white,
+                            color: colors.primary,
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
-                              BoxShadow(color: Colors.black.withValues(), blurRadius: 12, offset: const Offset(0,1))
+                              BoxShadow(color: colors.onPrimary.withValues(), blurRadius: 10, offset: const Offset(0,0))
                             ]
                           ),
                           child: Row(
@@ -119,9 +114,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 60,),
-                  _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => { widget.onNavigate(2)}, colors: colors),
-                  _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1)}, colors: colors),
-                  _buildCard(icon: Icons.logout, title: "Logout", onTap: userProvider.logout,colors: colors)
+                  _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => { widget.onNavigate(2)}, colors: colors, text: text),
+                  _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1)}, colors: colors, text: text),
+                  _buildCard(icon: Icons.logout, title: "Logout", onTap: userProvider.logout,colors: colors, text: text)
                   
                 ],
               ),
@@ -129,27 +124,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
   }
 
-  Widget _buildCard({required IconData icon, required String title, String? subtitle, required VoidCallback onTap, ColorScheme ?colors}){
+  Widget _buildCard({required IconData icon, required String title, String? subtitle, required VoidCallback onTap, ColorScheme ?colors, TextTheme ?text}){
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [colors!.primary, colors.primary],
-          begin: AlignmentGeometry.topCenter,
-          end: AlignmentGeometry.bottomCenter
-        ),
+        color: colors?.primary,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(), blurRadius: 10, offset: const Offset(0,2))
+          BoxShadow(color: colors!.onPrimary.withValues(), blurRadius: 5, offset: const Offset(-1,1))
         ]
       ),
       child: ListTile(
         leading: Icon(icon, color: colors.primary,size: 28,),
-        title: Text(title, style: TextStyle(
-          fontWeight: FontWeight.w700,
-          color: Colors.black
-        ),),
+        title: Text(title, style: context.buttonText),
         subtitle: subtitle != null ? Text(subtitle, style: TextStyle(
           fontSize: AppTextSizes.verySmallText,
           color: Colors.black
