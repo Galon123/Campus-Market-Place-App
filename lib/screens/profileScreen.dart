@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:e_commerce_refactor/providers/ThemeProvider.dart';
 import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
@@ -8,8 +7,7 @@ import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
 
-  final void Function(int index) onNavigate;
-  const ProfileScreen({super.key, required this.onNavigate});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -23,8 +21,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final colors = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     final userProvider = Provider.of<UserProvider>(context, listen:true);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     return Scaffold(
             body: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
                   Stack(
@@ -90,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
+                        bottom: 10,
                         left: 15,
                         right: 15,
                         child:Row(
@@ -105,12 +105,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 20,),
-                  _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => { widget.onNavigate(2)}, colors: colors, text: text),
-                  _buildCard(icon: Icons.money, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => { widget.onNavigate(1)}, colors: colors, text: text),
+                  _buildCard(icon: Icons.book, title: "Listings",subtitle: "Shows Your Item Listings", onTap: () => {Navigator.pushNamed(context, '/mylistings')}, colors: colors, text: text),
+                  _buildCard(icon: Icons.attach_money_outlined, title: "Bids",subtitle: "Shows Your Item Bids", onTap: () => {Navigator.pushNamed(context, '/mybids')}, colors: colors, text: text),
                   
                   Divider(height: 60, indent: 10, endIndent: 10, color: colors.surfaceDim,),
 
-                  _logoutButton(userProvider: userProvider, colors: colors)
+                  _darkModeToggleButton(colors: colors, themeProvider: themeProvider),
+
+                  Divider(height: 60, indent: 10, endIndent: 10, color: colors.surfaceDim,),
+
+                  _logoutButton(userProvider: userProvider, colors: colors),
+
+                  const SizedBox(height: 500,)
                   
                 ],
               ),
@@ -121,6 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildCard({required IconData icon, required String title, String? subtitle, required VoidCallback onTap, ColorScheme ?colors, TextTheme ?text}){
 
     return Container(
+      height: 70,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         gradient: RadialGradient(colors: [colors!.primary, colors.secondary], radius: 5, stops: [0,0.95]),
@@ -176,11 +183,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _darkModeToggleButton({required ColorScheme colors, required ThemeProvider themeProvider}) {
+    return Container(
+      height: 70,
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      padding: EdgeInsets.symmetric(vertical: 5),
+      decoration: BoxDecoration(
+        gradient: RadialGradient(colors: [colors.primary, colors.secondary], radius: 5, stops: [0,0.95]),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: colors.onPrimary, width: 1),
+      ),
+      child: ListTile(
+        leading: Icon(Icons.dark_mode_rounded, color: colors.primary,size: 28,),
+        title: Text("Dark Mode", style: context.buttonText),
+        trailing: Switch(
+          value: themeProvider.isDark, 
+          onChanged: (value) => themeProvider.setTheme(value == true ? ThemeMode.dark : ThemeMode.light)
+        ),
+        onTap: () => {
+          
+        },
+      ),
+    ); 
+  }
+
   Widget _logoutButton ({ required UserProvider userProvider, required ColorScheme colors}){
     return Container(
       margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(5),
-      height: 65,
+      padding: EdgeInsets.all(1),
+      height: 55,
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(15),

@@ -17,17 +17,12 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
 
   int _currentIndex = 0;
 
-  void _navigateTo(int value) {
-    setState(() {
-      _currentIndex = value;
-    });
-  }
 
   late final List<Widget> _pages =[
     FeedScreen(),
     CreateListing(),
     NotificationScreen(),
-    ProfileScreen(onNavigate : _navigateTo)
+    ProfileScreen()
   ];
 
   @override
