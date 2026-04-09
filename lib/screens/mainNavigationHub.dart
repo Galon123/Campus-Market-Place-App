@@ -1,10 +1,14 @@
+import 'package:e_commerce_refactor/providers/NotificationProvider.dart';
+import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:e_commerce_refactor/screens/bidScreen.dart';
 import 'package:e_commerce_refactor/screens/createListing.dart';
 import 'package:e_commerce_refactor/screens/feedScreen.dart';
 import 'package:e_commerce_refactor/screens/listingScreen.dart';
 import 'package:e_commerce_refactor/screens/notificationScreen.dart';
 import 'package:e_commerce_refactor/screens/profileScreen.dart';
+import 'package:e_commerce_refactor/services/ApiClient.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainNavigationHub extends StatefulWidget {
   const MainNavigationHub({super.key});
@@ -24,6 +28,20 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
     NotificationScreen(),
     ProfileScreen()
   ];
+
+  @override
+  void initState(){
+    super.initState();
+
+    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
+
+      final auth = Provider.of<UserProvider>(context, listen: false);
+      final notify = Provider.of<NotificationProvider>(context, listen: false);
+
+      notify.initSSEConnection(Apiclient.baseUrl, auth.)
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

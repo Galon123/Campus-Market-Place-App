@@ -1,3 +1,4 @@
+import 'package:e_commerce_refactor/providers/NotificationProvider.dart';
 import 'package:e_commerce_refactor/providers/ThemeProvider.dart';
 import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/theme/constants.dart';
@@ -26,7 +27,8 @@ void main() async{
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider(initialLoginState: sessionExists)),
-        ChangeNotifierProvider(create: (_) => ThemeProvider())
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider())
       ],
       child: const MarketplaceApp(),
     )

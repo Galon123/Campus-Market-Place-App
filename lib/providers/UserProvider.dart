@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:e_commerce_refactor/models/Product.dart';
 import 'package:e_commerce_refactor/services/ApiClient.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserProvider extends ChangeNotifier{
 
@@ -219,6 +220,65 @@ class UserProvider extends ChangeNotifier{
       notifyListeners();
     }
 
+  }
+
+  Future<void> uploadImage(int item_id, XFile image) async{
+
+    try{
+
+      FormData formData = FormData.fromMap({
+        "image" : await MultipartFile.fromFile(
+          image.path,
+          filename: image.name
+        )
+      });
+
+      final response = await Apiclient.dio.post(
+        '/items/$item_id', 
+        data: formData,
+        options: Options(
+          contentType: 'multipart/form-data'
+        )
+      );
+
+      if(response.statusCode == 200){
+        debugPrint("Image Uploaded Successfully");
+      }
+    } catch(e) {
+      debugPrint("Error uploading image");
+    }
+  }
+
+  Future<bool> createItem(XFile? image, String title, String price, String quantity, String condition, String desc, List<String> categories) async{
+
+    _isLoading = true;
+    notifyListeners();
+
+    try{
+
+      final response = await Apiclient.dio.post('/items/create', data: {
+        "title" : title,
+        "description" : desc,
+        "min_price" : price,
+        "quantity" : quantity,
+        "condition" : condition,
+        "categories" : categories
+      });
+
+      if(response.statusCode == 200){
+
+        final itemId = response.data["id"];
+        uploadImage(itemId, image);
+        return true;
+      }
+      return false;
+    } catch(e) {
+      debugPrint("Error in Item Creation");
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
 }

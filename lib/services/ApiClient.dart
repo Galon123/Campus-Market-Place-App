@@ -10,6 +10,8 @@ const BASE_URL = "http://192.168.1.12:8000";
 
 class Apiclient {
 
+  static String get baseUrl => BASE_URL;
+
   static final Dio dio = Dio(BaseOptions(
     baseUrl: BASE_URL,
     connectTimeout: const Duration(seconds: 5),
