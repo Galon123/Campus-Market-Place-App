@@ -40,7 +40,7 @@ class _CreateListingState extends State<CreateListing> {
     try{
       final userProvider = Provider.of<UserProvider>(context,listen: false);
 
-      final success = userProvider.createItem(
+      final success = await userProvider.createItem(
         _image, 
         _titleController.text.trim(), 
         _priceController.text.trim(), 
@@ -48,8 +48,16 @@ class _CreateListingState extends State<CreateListing> {
         _selectedCondition, 
         _descController.text.trim(),
         _selectedCategories
-        
       );
+
+      if(success == true){
+        debugPrint("Item created Successfully");
+      }
+      else{
+        debugPrint("Item creation not successful");
+      }
+    } catch (e) {
+      debugPrint("Item Creation Error : $e");
     }
 
   }
@@ -192,7 +200,7 @@ class _CreateListingState extends State<CreateListing> {
                           value: c,
                           child: Text(c.replaceAll("_", " "))
                         )).toList(), 
-                        onChanged: (value) => {setState( () => _selectedCondition = value)},
+                        onChanged: (value) => {setState( () => _selectedCondition = value!)},
                       ),
                       
                       SizedBox(height: 10,),

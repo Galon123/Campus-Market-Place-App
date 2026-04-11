@@ -113,7 +113,7 @@ class UserProvider extends ChangeNotifier{
     notifyListeners();
 
     try{
-      final response = await Apiclient.dio.get('/me');
+      final response = await Apiclient.dio.get('/profile/');
 
       if(response.statusCode == 200){
         _username = response.data['username'];
@@ -222,13 +222,13 @@ class UserProvider extends ChangeNotifier{
 
   }
 
-  Future<void> uploadImage(int item_id, XFile image) async{
+  Future<void> uploadImage(int item_id, XFile? image) async{
 
     try{
 
       FormData formData = FormData.fromMap({
         "image" : await MultipartFile.fromFile(
-          image.path,
+          image!.path,
           filename: image.name
         )
       });

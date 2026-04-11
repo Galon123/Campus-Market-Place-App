@@ -35,10 +35,9 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
 
     WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
 
-      final auth = Provider.of<UserProvider>(context, listen: false);
       final notify = Provider.of<NotificationProvider>(context, listen: false);
 
-      notify.initSSEConnection(Apiclient.baseUrl, auth.)
+      notify.initSSEConnection();
 
     });
   }

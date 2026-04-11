@@ -214,17 +214,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       height: 55,
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(25),
         color: colors.error,
         border: Border.all(color: colors.onPrimary, width: 1)
       ),
-      child: ListTile(
-        trailing: Icon(Icons.arrow_forward_ios),
-        leading: Icon(Icons.logout),
-        title: Text("Logout", style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),),
+      child: ElevatedButton(
+        onPressed: () => userProvider.logout(),
+        child: ListTile(
+          trailing: Icon(Icons.arrow_forward_ios),
+          leading: Icon(Icons.logout),
+          title: Text("Logout", style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),),
+        ),
       )
     );
   }
