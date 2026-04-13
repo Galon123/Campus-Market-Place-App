@@ -9,7 +9,6 @@ class NotificationProvider extends ChangeNotifier{
   final List<AppNotification> _notifications = [];
 
   bool _isConnected = false;
-  bool _isConnecting = false;
   int _unreadCount = 0;
 
   StreamSubscription? _subscription;
@@ -20,9 +19,8 @@ class NotificationProvider extends ChangeNotifier{
 
 Future<void> initSSEConnection() async {
     // 1. Strict Guard: Don't start if already active or currently trying
-    if (_isConnected || _isConnecting) return;
+    if (_isConnected) return;
 
-    _isConnecting = true;
     notifyListeners();
 
     try {
@@ -41,7 +39,6 @@ Future<void> initSSEConnection() async {
 
       // We only reach here if the Status is 200
       _isConnected = true;
-      _isConnecting = false;
       notifyListeners();
 
       // Cancel any old subscription just in case
@@ -53,13 +50,13 @@ Future<void> initSSEConnection() async {
           .transform(const LineSplitter())
           .listen(
         (line) {
-          if (line.startsWith("data: ")) {
-            final String rawData = line.substring(6).trim();
-            // 2. Add 'ping' check here to ignore server heartbeats
-            if (rawData.isNotEmpty && rawData != "ping" && rawData != ":") {
-              _processNewNotification(rawData);
+          debugPrint("Raw Line : $line");
+            if (line.startsWith("data: ")) {
+              final String rawData = line.substring(6).trim();
+              if (rawData.isNotEmpty && rawData != "ping") {
+                _processNewNotification(rawData);
+              }
             }
-          }
         },
         onError: (error) {
           debugPrint("SSE Stream Error: $error");
@@ -77,10 +74,10 @@ Future<void> initSSEConnection() async {
     }
   }
 
+
   // 3. Centralized disconnection logic to prevent "Parallel Loops"
   void _handleDisconnect() {
     _isConnected = false;
-    _isConnecting = false;
     _subscription?.cancel();
     notifyListeners();
 

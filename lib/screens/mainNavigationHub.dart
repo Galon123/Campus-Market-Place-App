@@ -61,42 +61,53 @@ class _MainNavigationHubState extends State<MainNavigationHub> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-            child: NavigationBar(
-              height: 65,
-              elevation: 4,
-              shadowColor: Colors.black,
-              backgroundColor: colors.secondary,
-              indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10.0)),
-              labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-              selectedIndex: _currentIndex,
-              onDestinationSelected: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              destinations: [
-                NavigationDestination(
-                  icon: Icon(Icons.home_outlined), 
-                  selectedIcon: Icon(Icons.home_filled, color: colors.primary),
-                  label: "Feed"
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.add_outlined), 
-                  selectedIcon: Icon(Icons.add, color: colors.primary),
-                  label: "Create"
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.notifications), 
-                  selectedIcon: Icon(Icons.notifications_active, color: colors.primary),
-                  label: "Notifications"
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.person_2_outlined), 
-                  selectedIcon: Icon(Icons.person_2, color: colors.primary),
-                  label: "Profile"
-                ),
-              ],
-            ),
+            child: Consumer<NotificationProvider>(
+              builder: (context, notificationProvider, child) {
+                return NavigationBar(
+                  height: 65,
+                  elevation: 4,
+                  shadowColor: Colors.black,
+                  backgroundColor: colors.secondary,
+                  indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10.0)),
+                  labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+                  selectedIndex: _currentIndex,
+                  onDestinationSelected: (int index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                    if(index == 2){
+                      notificationProvider.markAsRead();
+                    }
+                  },
+                  destinations: [
+                    NavigationDestination(
+                      icon: Icon(Icons.home_outlined), 
+                      selectedIcon: Icon(Icons.home_filled, color: colors.primary),
+                      label: "Feed"
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.add_outlined), 
+                      selectedIcon: Icon(Icons.add, color: colors.primary),
+                      label: "Create"
+                    ),
+                    NavigationDestination(
+                      icon: Badge(
+                        label: Text('${notificationProvider.unreadCount}'),
+                        isLabelVisible: notificationProvider.unreadCount > 0,
+                        child: Icon(Icons.notifications)
+                      ), 
+                      selectedIcon: Icon(Icons.notifications_active, color: colors.primary),
+                      label: "Notifications"
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.person_2_outlined), 
+                      selectedIcon: Icon(Icons.person_2, color: colors.primary),
+                      label: "Profile"
+                    ),
+                  ],
+                );
+              }
+            )
           ),
         ),
       ),

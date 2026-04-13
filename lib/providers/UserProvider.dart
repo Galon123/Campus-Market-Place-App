@@ -233,7 +233,7 @@ class UserProvider extends ChangeNotifier{
         )
       });
 
-      final response = await Apiclient.dio.post(
+      final response = await Apiclient.dio.get(
         '/items/$item_id', 
         data: formData,
         options: Options(
@@ -249,13 +249,12 @@ class UserProvider extends ChangeNotifier{
     }
   }
 
-  Future<bool> createItem(XFile? image, String title, String price, String quantity, String condition, String desc, List<String> categories) async{
+  Future<bool> createItem(XFile? image, String title, double price, int quantity, String condition, String desc, List<String> categories) async{
 
     _isLoading = true;
     notifyListeners();
 
     try{
-
       final response = await Apiclient.dio.post('/items/create', data: {
         "title" : title,
         "description" : desc,

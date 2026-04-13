@@ -1,17 +1,76 @@
+import 'package:e_commerce_refactor/providers/NotificationProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class NotificationScreen extends StatefulWidget {
+class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
   @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
-}
-
-class _NotificationScreenState extends State<NotificationScreen> {
-  @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Scaffold(
-      
+      appBar: AppBar(
+        title: const Text("Notifications"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_sweep),
+            onPressed: () => context.read<NotificationProvider>().clearAll(),
+          )
+        ],
+      ),
+      body: Consumer<NotificationProvider>(
+        builder: (context, provider, child) {
+          if (provider.notifications.isEmpty) {
+            return const Center(child: Text("No notifications yet!"));
+          }
+
+          return ListView.separated(
+            itemCount: provider.notifications.length,
+            separatorBuilder: (context, index) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final item = provider.notifications[index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: _getCategoryColor(item.type, colors),
+                  child: Icon(_getCategoryIcon(item.type), color: Colors.white),
+                ),
+                title: Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.message),
+                    const SizedBox(height: 4),
+                    Text(
+                      _formatTimestamp(item.timeStamp), 
+                      style: const TextStyle(fontSize: 10, color: Colors.grey)
+                    ),
+                  ],
+                ),
+                isThreeLine: true,
+              );
+            },
+          );
+        },
+      ),
     );
+  }
+
+  // Helper to pick icons based on your FastAPI 'type' field
+  IconData _getCategoryIcon(String type) {
+    switch (type) {
+      case 'BID': return Icons.gavel;
+      case 'SALE': return Icons.attach_money;
+      default: return Icons.notifications;
+    }
+  }
+
+  Color _getCategoryColor(String type, ColorScheme colors) {
+    return type == 'BID' ? colors.primary : colors.secondary;
+  }
+
+  String _formatTimestamp(DateTime dt) {
+    // You can use the 'intl' package here, but for now:
+    return "${dt.hour}:${dt.minute.toString().padLeft(2, '0')}";
   }
 }

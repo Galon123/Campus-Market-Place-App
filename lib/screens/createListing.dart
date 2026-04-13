@@ -1,7 +1,9 @@
+import 'dart:ffi';
+
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/widgets/ImagePreviewWidget.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Size;
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -43,8 +45,8 @@ class _CreateListingState extends State<CreateListing> {
       final success = await userProvider.createItem(
         _image, 
         _titleController.text.trim(), 
-        _priceController.text.trim(), 
-        _quantityController.text.trim(), 
+        double.parse(_priceController.text.trim()), 
+        int.parse(_quantityController.text.trim()), 
         _selectedCondition, 
         _descController.text.trim(),
         _selectedCategories
@@ -141,8 +143,6 @@ class _CreateListingState extends State<CreateListing> {
                                       ),
                                       hintText: '999.99',
                                       hintStyle: text.bodyMedium,
-                                      prefixIcon: Icon(Icons.currency_rupee),
-                                      prefixIconConstraints: BoxConstraints.tight(Size(32, 20)),
                                       fillColor: colors.surface,
                                       filled: true,
                                       border: OutlineInputBorder(borderSide: BorderSide(color: colors.secondary),borderRadius: BorderRadius.circular(12))
