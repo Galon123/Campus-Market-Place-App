@@ -66,6 +66,9 @@ class NotificationScreen extends StatelessWidget {
       case 'Bid_Deleted' : return Icons.delete;
       case 'Bid_Accepted' : return Icons.check;
       case 'Bid_Rejected' : return Icons.close;
+      case 'Rating_Pending' : return Icons.star;
+      case 'Rating_Recieved' : return Icons.stars;
+      case 'Reported_Successfully' : return Icons.report;
       default: return Icons.notifications;
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_commerce_refactor/models/Product.dart';
 import 'package:e_commerce_refactor/providers/ThemeProvider.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
@@ -78,16 +80,57 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _buildProductCard(Product product, ColorScheme colors){
 
-    String imageURL;
-    if(product.imgUrl!.contains('127.0.0.1') || product.imgUrl!.contains('localhost')){
-      imageURL = product.imgUrl!.replaceAll('https://127.0.0.1:8000', BASE_URL);
-    }
+    String imageUrl = product.images.isNotEmpty
+    ? '${Apiclient.baseUrl}/${product.images[0].imagePath}'
+    : ''
+    ;
+    
 
     return Card(
-      color: colors.secondary,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15)
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 1. Image Section
+          AspectRatio(
+            aspectRatio: 1,
+            child: Image.network(imageUrl, fit: BoxFit.cover),
+          ),
+          
+          // 2. Info Section
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "₹${product.minPrice}",
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                ),
+                const SizedBox(height: 4),
+                // Show Condition (New/Used)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: colors.primary,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    product.condition.replaceAll("_", " "),
+                    style: TextStyle(fontSize: 14, color: colors.secondary),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
 

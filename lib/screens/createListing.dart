@@ -149,6 +149,7 @@ class _CreateListingState extends State<CreateListing> {
                                 border: OutlineInputBorder(borderSide: BorderSide(color: colors.secondary),borderRadius: BorderRadius.circular(12))
                               ),
                               controller: _titleController,
+                              style: text.labelLarge,
                             ),
                           ],
                         ),
@@ -178,6 +179,7 @@ class _CreateListingState extends State<CreateListing> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     controller: _priceController,
+                                    style: text.labelLarge,
                                   ),
                                 ],
                               ),
@@ -203,6 +205,7 @@ class _CreateListingState extends State<CreateListing> {
                                     ),
                                     keyboardType: TextInputType.number,
                                     controller: _quantityController,
+                                    style: text.labelLarge,
                                   ),
                                 ],
                               ),
@@ -254,6 +257,7 @@ class _CreateListingState extends State<CreateListing> {
                               ),
                               maxLines: 4,
                               controller: _descController,
+                              style: text.labelLarge,
                             ),
                           ],
                         ),
@@ -268,6 +272,7 @@ class _CreateListingState extends State<CreateListing> {
                             child: FilterChip(
                               label: Text(category),
                               selected: _selectedCategories.contains(category),
+                              selectedColor: colors.primary,
                               onSelected: (selected) {
                                 setState(() {
                                   selected 
@@ -293,7 +298,7 @@ class _CreateListingState extends State<CreateListing> {
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                     backgroundColor: colors.primary,
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(16.0),
                     elevation: 10
                   ),
                   onPressed: isLoading ? null : handleItemCreate, 

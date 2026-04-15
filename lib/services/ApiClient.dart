@@ -84,7 +84,6 @@ class CookieCleaner extends Interceptor{
 
 class AuthInterceptor extends Interceptor{
 
-
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler){
 
@@ -94,7 +93,11 @@ class AuthInterceptor extends Interceptor{
       return handler.reject(
         DioException(
           requestOptions: response.requestOptions,
-          response: response..statusCode = 401,
+          response: Response(
+            requestOptions: response.requestOptions,
+            statusCode: 401,
+            data: response.data
+          ),
           type: DioExceptionType.badResponse,
         )
       );
