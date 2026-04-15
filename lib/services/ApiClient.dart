@@ -40,6 +40,20 @@ class Apiclient {
     dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
   }
 
+  static Future<bool> forceManualRefresh() async{
+
+    try{
+
+      final response = await dio.post("/refresh");
+      return response.statusCode == 200;
+
+    } catch (e){
+      debugPrint("Error in Manual Refresh....");
+      return false;
+    }
+
+  }
+
   static Future<bool> hasValidSession() async{
     var cookies = await cookieJar.loadForRequest(Uri.parse(dio.options.baseUrl));
     return cookies.isNotEmpty;
@@ -69,6 +83,25 @@ class CookieCleaner extends Interceptor{
 }
 
 class AuthInterceptor extends Interceptor{
+
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler){
+
+    if(response.data is Map && response.data['error_code'] == "UnAuthorized"){
+      debugPrint("Interceptive UnAuthorized found. Redirecting to error Handler.....");
+
+      return handler.reject(
+        DioException(
+          requestOptions: response.requestOptions,
+          response: response..statusCode = 401,
+          type: DioExceptionType.badResponse,
+        )
+      );
+    }
+
+    return handler.next(response);
+  }
 
   @override
   Future<void> onError(DioException error, ErrorInterceptorHandler handler) async{
@@ -114,4 +147,5 @@ class AuthInterceptor extends Interceptor{
     );
 
   }
+
 }

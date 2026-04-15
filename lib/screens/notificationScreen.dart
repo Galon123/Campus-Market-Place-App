@@ -56,11 +56,16 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
-  // Helper to pick icons based on your FastAPI 'type' field
   IconData _getCategoryIcon(String type) {
     switch (type) {
-      case 'BID': return Icons.gavel;
-      case 'SALE': return Icons.attach_money;
+      case 'Item_Created': return Icons.add;
+      case 'Item_Updated': return Icons.update;
+      case 'Item_Deleted' : return Icons.delete;
+      case 'Bid_Created': return Icons.add;
+      case 'Bid_Updated': return Icons.update;
+      case 'Bid_Deleted' : return Icons.delete;
+      case 'Bid_Accepted' : return Icons.check;
+      case 'Bid_Rejected' : return Icons.close;
       default: return Icons.notifications;
     }
   }

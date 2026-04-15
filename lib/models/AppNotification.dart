@@ -13,8 +13,8 @@ class AppNotification {
       title: json['title'], 
       type: json['type'], 
       message: json['message'], 
-      timeStamp: json['created_at'],
-      isRead: json['is_read']
+      timeStamp: DateTime.now(),
+      isRead: false
     );
   }
 

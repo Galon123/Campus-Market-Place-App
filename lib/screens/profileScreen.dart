@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:e_commerce_refactor/providers/ThemeProvider.dart';
+import 'package:e_commerce_refactor/services/ApiClient.dart';
 import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
@@ -55,7 +58,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       CircleAvatar(
                                         radius: 48,
                                         backgroundColor: colors.secondary,
-                                        child: Text(userProvider.username[0], style: TextStyle(fontSize: AppTextSizes.mainHeadings, color: colors.primary)),
+                                        child: userProvider.profilePicPath == null 
+                                        ? Text(userProvider.username[0], style: TextStyle(fontSize: AppTextSizes.mainHeadings, color: colors.primary))
+                                        : Image.file(File('${Apiclient.baseUrl}/${userProvider.profilePicPath}')),
                                       ),
                                       SizedBox(width: 20),
                                       Column(
@@ -63,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         children: [
                                           Text(userProvider.username, style: TextStyle(color: colors.onPrimary, fontSize: AppTextSizes.subHeadings, fontWeight: FontWeight.bold)),
                                           Text(userProvider.email, style: TextStyle(color: colors.onPrimary, fontSize: AppTextSizes.smallText)),
-                                          Text("+91 ${userProvider.phoneNo}", style: TextStyle(color: colors.onPrimary, fontSize: AppTextSizes.smallText)),
+                                          Text("${userProvider.phoneNo}", style: TextStyle(color: colors.onPrimary, fontSize: AppTextSizes.smallText)),
                                           SizedBox(height: 2),
                                           Container(
                                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),

@@ -10,6 +10,8 @@ class UserProvider extends ChangeNotifier{
   String _email = "";
   String _phoneNo = "";
   double _rating = 0.0;
+  String _profilePicPath = '';
+
 
   bool _isLoading = false;
   bool _isUserLoading = false;
@@ -33,6 +35,7 @@ class UserProvider extends ChangeNotifier{
   String get email => _email;
   String get phoneNo => _phoneNo;
   double get rating => _rating;
+  String get profilePicPath => _profilePicPath;
 
   bool get isLoading => _isLoading;
   bool get isUserLoading => _isUserLoading;
@@ -120,6 +123,7 @@ class UserProvider extends ChangeNotifier{
         _email = response.data['email'];
         _phoneNo = response.data['phone_no'];
         _rating = response.data['rating'];
+        _profilePicPath = response.data['image_path'] ?? '';
         notifyListeners();
       }
     } catch(e){
@@ -186,6 +190,19 @@ class UserProvider extends ChangeNotifier{
       notifyListeners();
     }
 
+  }
+
+  Future<void> refreshFeed() async{
+
+    _isProductLoading = false;
+
+    _products = [];
+    _productSkip = 0;
+    _hasMoreProducts = true;
+
+    notifyListeners();
+
+    await fetchProducts();
   }
 
   Future<void> fetchBids() async{

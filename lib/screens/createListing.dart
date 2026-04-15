@@ -32,6 +32,31 @@ class _CreateListingState extends State<CreateListing> {
   List<String> _selectedCategories = [];
   XFile? _image;
 
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    _priceController.dispose();
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  void clearForm() {
+    
+    _titleController.clear();
+    _descController.clear();
+    _priceController.clear();
+    _quantityController.clear();
+    
+    setState(() {
+      _image = null;
+      _selectedCategories = [];
+      _selectedCondition = "New";
+    });
+
+    _formkey.currentState?.reset();
+  }
   
   Future<void> handleItemCreate() async{
 
@@ -60,6 +85,10 @@ class _CreateListingState extends State<CreateListing> {
       }
     } catch (e) {
       debugPrint("Item Creation Error : $e");
+    } finally{
+      setState(() {
+        isLoading = false;
+      });
     }
 
   }
@@ -86,7 +115,7 @@ class _CreateListingState extends State<CreateListing> {
             SizedBox(height: 16,),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 5),
-              height: 450,
+              height: 550,
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(color: colors.onPrimary),
@@ -229,6 +258,27 @@ class _CreateListingState extends State<CreateListing> {
                           ],
                         ),
                       ),
+                      SizedBox(height: 10,),
+                      Text("Categories", style: text.bodyMedium,),
+                      Wrap(
+                        spacing: 8.0,
+                        children: all_categories.map((category) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(vertical: 6),
+                            child: FilterChip(
+                              label: Text(category),
+                              selected: _selectedCategories.contains(category),
+                              onSelected: (selected) {
+                                setState(() {
+                                  selected 
+                                    ? _selectedCategories.add(category) 
+                                    : _selectedCategories.remove(category);
+                                });
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      )
                     ],
                   ),
                 )
