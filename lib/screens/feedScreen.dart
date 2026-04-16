@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:e_commerce_refactor/models/Product.dart';
 import 'package:e_commerce_refactor/providers/ThemeProvider.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
+import 'package:e_commerce_refactor/screens/ItemDetail.dart';
 import 'package:e_commerce_refactor/services/ApiClient.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,16 @@ class _FeedScreenState extends State<FeedScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Feed"),
+        actions: [
+          IconButton(
+            onPressed: () {}, 
+            icon: Icon(Icons.filter_alt)
+          ),
+          IconButton(
+            onPressed: () {}, 
+            icon: Icon(Icons.search)
+          )
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -82,55 +93,63 @@ class _FeedScreenState extends State<FeedScreen> {
 
     String imageUrl = product.images.isNotEmpty
     ? '${Apiclient.baseUrl}/${product.images[0].imagePath}'
-    : ''
+    : 'https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg'
     ;
     
 
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 1. Image Section
-          AspectRatio(
-            aspectRatio: 1,
-            child: Image.network(imageUrl, fit: BoxFit.cover),
-          ),
-          
-          // 2. Info Section
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  "₹${product.minPrice}",
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
-                ),
-                const SizedBox(height: 4),
-                // Show Condition (New/Used)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: colors.primary,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    product.condition.replaceAll("_", " "),
-                    style: TextStyle(fontSize: 14, color: colors.secondary),
-                  ),
-                ),
-              ],
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ItemDetail(product: product))
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 1. Image Section
+            AspectRatio(
+              aspectRatio: 1,
+              child: Image.network(imageUrl, fit: BoxFit.cover),
             ),
-          ),
-        ],
+            
+            // 2. Info Section
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    "₹${product.minPrice}",
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                  ),
+                  const SizedBox(height: 4),
+                  // Show Condition (New/Used)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: colors.primary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      product.condition.replaceAll("_", " "),
+                      style: TextStyle(fontSize: 14, color: colors.secondary),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
 

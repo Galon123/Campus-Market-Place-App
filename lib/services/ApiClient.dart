@@ -6,7 +6,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-const BASE_URL = "http://192.168.1.12:8000";
+const BASE_URL = "http://127.0.0.1:8000";
 
 class Apiclient {
 
@@ -107,14 +107,14 @@ class AuthInterceptor extends Interceptor{
   }
 
   @override
-  Future<void> onError(DioException error, ErrorInterceptorHandler handler) async{
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async{
 
-    if (error.requestOptions.path.contains('/refresh') || 
-      error.requestOptions.path.contains('/login')) {
-    return handler.next(error);
+    if (err.requestOptions.path.contains('/refresh') || 
+      err.requestOptions.path.contains('/login')) {
+    return handler.next(err);
   }
 
-    if(error.response?.statusCode == 401){
+    if(err.response?.statusCode == 401){
       debugPrint("Access Token Expired.Attempting Refresh....");
       
       try{
@@ -124,7 +124,7 @@ class AuthInterceptor extends Interceptor{
         if(refreshRes.statusCode == 200){
           debugPrint("Refresh Successful. Retrying Original Request.....");
 
-          final response = await _retry(error.requestOptions);
+          final response = await _retry(err.requestOptions);
           return handler.resolve(response);
         }
       } catch (e) {
@@ -132,7 +132,7 @@ class AuthInterceptor extends Interceptor{
       }
     }
 
-    return handler.next(error);
+    return handler.next(err);
   }
 
   Future<Response> _retry(RequestOptions requestOptions){
