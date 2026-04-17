@@ -16,11 +16,157 @@ class ItemDetail extends StatefulWidget {
 
 class _ItemDetailState extends State<ItemDetail> {
 
+  late List _bids;
+
   @override
   void initState() {
     super.initState();
     Provider.of<UserProvider>(context, listen: false).refreshUsername();
+    fetchBids();
   }
+
+  void _showBidSheet(BuildContext context, int itemId, double minPrice) {
+    final TextEditingController bidController = TextEditingController();
+    final TextEditingController quantController = TextEditingController();
+
+    String? errorMessageBid;
+    String? errorMessageQuant; // To hold our validation message
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => StatefulBuilder( // Allows the sheet to update itself
+        builder: (context, setSheetState) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            left: 20, right: 20, top: 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Place Your Bid (Min: ₹$minPrice)",
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: bidController,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                decoration: InputDecoration(
+                  prefixText: "₹ ",
+                  labelText: "Your Bid Amount",
+                  errorText: errorMessageBid, // Displays the error red text
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: (val) {
+                  // Clear error as user types
+                  if (errorMessageBid != null) {
+                    setSheetState(() => errorMessageBid = null);
+                  }
+                },
+              ),
+              SizedBox(height: 10,),
+              TextField(
+                controller: quantController,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: "Quantity",
+                  errorText: errorMessageQuant, // Displays the error red text
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: (val) {
+                  // Clear error as user types
+                  if (errorMessageQuant != null) {
+                    setSheetState(() => errorMessageQuant = null);
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo),
+                  onPressed: () {
+                    bool bidSuccess = false, quantSuccess = false;
+                    final double? enteredAmount = double.tryParse(bidController.text);
+                    final int? enteredQuant = int.tryParse(quantController.text);
+                    
+                    // Validation Logic
+                    if (enteredAmount == null) {
+                      setSheetState(() => errorMessageBid = "Please enter a valid number");
+                    } else if (enteredAmount < minPrice) {
+                      setSheetState(() => errorMessageBid = "Bid must be at least ₹$minPrice");
+                    } else {
+                      bidSuccess = true;
+                    }
+
+                    if(enteredQuant == null || enteredQuant <= 0){
+                      setSheetState(() => errorMessageQuant = "Please Enter a Valid Quantity");
+                    } else if(enteredQuant > widget.product.quantity){
+                      setSheetState(() => errorMessageQuant = "Quantity cannot be greater than available amount");
+                    } else {
+                      quantSuccess = true;
+                    }
+
+                    if(bidSuccess && quantSuccess){
+                      _placeBid(context, itemId, enteredAmount!, enteredQuant!);
+                    }
+
+                  },
+                  child: const Text("Confirm Bid", style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _placeBid(BuildContext context, int itemId, double amount, int quantity) async {
+    try {
+      final response = await Apiclient.dio.post("/bids/$itemId", data: {
+        "price": amount,
+        "quantity": quantity
+      });
+
+      if (response.statusCode == 200) {
+        Navigator.pop(context); // Close sheet
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Bid of ₹$amount placed successfully!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      // If backend returns a 400 (e.g., bid too low compared to others)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Could not place bid. Try a higher amount.")),
+      );
+    }
+  }
+
+  void fetchBids() async{
+
+    try{
+
+      final response = await Apiclient.dio.get('/items/${widget.product.id}');
+
+      _bids = response.data['bids'];
+
+    }catch(e){
+      debugPrint("Error in fetching bids of particular Item");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +255,34 @@ class _ItemDetailState extends State<ItemDetail> {
 
 
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: colors.secondary,
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 16)],
+        ),
+        child:Expanded(
+          child:isOwner ? 
+          ElevatedButton(
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all(EdgeInsetsGeometry.all(20)),
+              backgroundColor: WidgetStateProperty.all(Colors.grey.shade300),
+              textStyle: WidgetStateProperty.all(TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white))
+            ),
+            onPressed: () => {},
+            child: const Text("Cannot Bid"),
+          ):
+          ElevatedButton(
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all(EdgeInsetsGeometry.all(20)),
+              backgroundColor: WidgetStateProperty.all(Colors.greenAccent.shade400),
+              textStyle: WidgetStateProperty.all(TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white))
+            ),
+            onPressed: () => _showBidSheet(context, widget.product.id, widget.product.minPrice),
+            child:Text("Place Bid"),
+          ),
         ),
       ),
     );

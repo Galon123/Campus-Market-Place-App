@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:e_commerce_refactor/providers/NotificationProvider.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/widgets/ImagePreviewWidget.dart';
@@ -43,19 +44,19 @@ class _CreateListingState extends State<CreateListing> {
   }
 
   void clearForm() {
-    
+
     _titleController.clear();
     _descController.clear();
     _priceController.clear();
     _quantityController.clear();
     
+    _formkey.currentState?.reset();
+  
     setState(() {
       _image = null;
       _selectedCategories = [];
       _selectedCondition = "New";
     });
-
-    _formkey.currentState?.reset();
   }
   
   Future<void> handleItemCreate() async{
@@ -66,6 +67,7 @@ class _CreateListingState extends State<CreateListing> {
 
     try{
       final userProvider = Provider.of<UserProvider>(context,listen: false);
+      final notifyProvider = Provider.of<NotificationProvider>(context, listen: false);
 
       final success = await userProvider.createItem(
         _image, 
@@ -77,8 +79,11 @@ class _CreateListingState extends State<CreateListing> {
         _selectedCategories
       );
 
+      notifyProvider.image = _image!; 
+
       if(success == true){
         debugPrint("Item created Successfully");
+        clearForm();
       }
       else{
         debugPrint("Item creation not successful");
@@ -163,7 +168,7 @@ class _CreateListingState extends State<CreateListing> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Item Price', style: text.bodySmall,),
+                                  Text('Min Price (₹)', style: text.bodySmall,),
                                   SizedBox(height: 4,),
                                   TextFormField(
                                     decoration: InputDecoration(
@@ -180,6 +185,10 @@ class _CreateListingState extends State<CreateListing> {
                                     keyboardType: TextInputType.number,
                                     controller: _priceController,
                                     style: text.labelLarge,
+                                    validator: (value) {
+                                      if(value!.isEmpty) {return "This field is required";}
+                                      else {return null;}
+                                    },
                                   ),
                                 ],
                               ),
@@ -206,6 +215,10 @@ class _CreateListingState extends State<CreateListing> {
                                     keyboardType: TextInputType.number,
                                     controller: _quantityController,
                                     style: text.labelLarge,
+                                    validator: (value) {
+                                      if(value!.isEmpty) {return "This field is required";}
+                                      else {return null;}
+                                    },
                                   ),
                                 ],
                               ),
@@ -258,6 +271,10 @@ class _CreateListingState extends State<CreateListing> {
                               maxLines: 4,
                               controller: _descController,
                               style: text.labelLarge,
+                              validator: (value) {
+                                      if(value!.isEmpty) {return "This field is required";}
+                                      else {return null;}
+                                    },
                             ),
                           ],
                         ),

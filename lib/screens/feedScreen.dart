@@ -99,7 +99,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
     return Card(
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(side: BorderSide(color: colors.primary,width:  2),borderRadius: BorderRadius.circular(12)),
       child: GestureDetector(
         onTap: () {
           Navigator.push(

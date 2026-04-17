@@ -250,8 +250,8 @@ class UserProvider extends ChangeNotifier{
         )
       });
 
-      final response = await Apiclient.dio.get(
-        '/items/$item_id', 
+      final response = await Apiclient.dio.post(
+        '/images/$item_id', 
         data: formData,
         options: Options(
           contentType: 'multipart/form-data'

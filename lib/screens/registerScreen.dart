@@ -66,6 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text("Create Account", style: text.titleLarge),
               ),
+              const SizedBox(height: 20,),
               Expanded(
                 child: ListView(
                   children: [

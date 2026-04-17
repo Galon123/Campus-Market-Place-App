@@ -5,6 +5,7 @@ import 'package:e_commerce_refactor/models/AppNotification.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
 import 'package:e_commerce_refactor/services/ApiClient.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class NotificationProvider extends ChangeNotifier{
@@ -18,6 +19,8 @@ class NotificationProvider extends ChangeNotifier{
   List<AppNotification> get notifications => _notifications;
   int get unreadCount => _unreadCount;
   bool get isConnected => _isConnected;
+
+  late XFile image;
 
 Future<void> initSSEConnection(UserProvider userProvider) async {
     // 1. Strict Guard: Don't start if already active or currently trying
@@ -82,6 +85,11 @@ Future<void> initSSEConnection(UserProvider userProvider) async {
               if (rawData.isNotEmpty && rawData != "ping") {
                 _processNewNotification(rawData);
               }
+            }
+
+            if(line.startsWith("id: ")){
+              final itemId = line.substring(4).trim();
+              userProvider.uploadImage(itemId, image);
             }
         },
         onError: (error) {
