@@ -5,6 +5,8 @@ import 'package:e_commerce_refactor/services/ApiClient.dart';
 import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:e_commerce_refactor/theme/constants.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
+import 'package:e_commerce_refactor/widgets/ImagePickerBottomSheet.dart';
+import 'package:e_commerce_refactor/widgets/ImagePreviewWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,12 +57,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                   Row(
                                     children: [
-                                      CircleAvatar(
-                                        radius: 48,
-                                        backgroundColor: colors.secondary,
-                                        child: userProvider.profilePicPath == null 
-                                        ? Text(userProvider.username[0], style: TextStyle(fontSize: AppTextSizes.mainHeadings, color: colors.primary))
-                                        : Image.file(File('${Apiclient.baseUrl}/${userProvider.profilePicPath}')),
+                                      GestureDetector(
+                                        onTap: () => ImagePickerBottomSheet.show(
+                                          context, 
+                                          (image)=>userProvider.uploadProfilPic(image)
+                                        ),
+                                        child: CircleAvatar(
+                                          radius: 48,
+                                          backgroundColor: colors.secondary,
+                                          child: userProvider.profilePicPath == '' 
+                                          ? Text(userProvider.username[0], style: TextStyle(fontSize: AppTextSizes.mainHeadings, color: colors.primary))
+                                          : ClipOval(child: Image.network('${Apiclient.baseUrl}/${userProvider.profilePicPath}', fit: BoxFit.cover,)),
+                                        ),
                                       ),
                                       SizedBox(width: 20),
                                       Column(
@@ -101,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              _statItem(value: userProvider.products.length.toString(), field: "Listings",colors: colors ),
+                              _statItem(value: userProvider.myProducts.length.toString(), field: "Listings",colors: colors ),
                               _statItem(value: userProvider.bids.length.toString(), field: "Bids",colors: colors),
                               _statItem(value: userProvider.rating.toString(), field: "Rating",colors: colors)
                             ],

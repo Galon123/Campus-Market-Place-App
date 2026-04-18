@@ -16,7 +16,9 @@ class ItemDetail extends StatefulWidget {
 
 class _ItemDetailState extends State<ItemDetail> {
 
-  late List _bids;
+  List _bids = [];
+
+  List get bids => _bids;
 
   @override
   void initState() {
@@ -25,13 +27,28 @@ class _ItemDetailState extends State<ItemDetail> {
     fetchBids();
   }
 
+  void fetchBids() async{
+
+    try{
+
+      final response = await Apiclient.dio.get('/items/${widget.product.id}');
+
+      setState(() {
+        _bids = response.data['bids'];
+      });
+
+    }catch(e){
+      debugPrint("Error in fetching bids of particular Item");
+    }
+  }
+
   void _showBidSheet(BuildContext context, int itemId, double minPrice) {
     final TextEditingController bidController = TextEditingController();
     final TextEditingController quantController = TextEditingController();
 
     String? errorMessageBid;
-    String? errorMessageQuant; // To hold our validation message
-
+    String? errorMessageQuant; 
+  
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -138,6 +155,15 @@ class _ItemDetailState extends State<ItemDetail> {
       });
 
       if (response.statusCode == 200) {
+        final response = await Apiclient.dio.get('/items/${widget.product.id}');
+
+        setState(() {
+          _bids = response.data['bids'];
+
+        });
+
+
+
         Navigator.pop(context); // Close sheet
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -154,26 +180,13 @@ class _ItemDetailState extends State<ItemDetail> {
     }
   }
 
-  void fetchBids() async{
-
-    try{
-
-      final response = await Apiclient.dio.get('/items/${widget.product.id}');
-
-      _bids = response.data['bids'];
-
-    }catch(e){
-      debugPrint("Error in fetching bids of particular Item");
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
 
     final username = Provider.of<UserProvider>(context).username;
     final product = widget.product;
     final bool isOwner = product.seller.username == username;
+    final bool alreadyBid = bids.any((bid) => bid['bider']['username'] == username);
 
     String imageUrl = product.images.isNotEmpty
     ? '${Apiclient.baseUrl}/${product.images[0].imagePath}'
@@ -263,8 +276,7 @@ class _ItemDetailState extends State<ItemDetail> {
           color: colors.secondary,
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 16)],
         ),
-        child:Expanded(
-          child:isOwner ? 
+          child:isOwner || alreadyBid? 
           ElevatedButton(
             style: ButtonStyle(
               padding: WidgetStateProperty.all(EdgeInsetsGeometry.all(20)),
@@ -284,7 +296,6 @@ class _ItemDetailState extends State<ItemDetail> {
             child:Text("Place Bid"),
           ),
         ),
-      ),
     );
   }
 }

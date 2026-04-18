@@ -25,6 +25,11 @@ class UserProvider extends ChangeNotifier{
   int _productSkip = 0;
   final int _productLimit = 10;
 
+  List<dynamic> _myProducts = [];
+  bool _hasMoreListings = true;
+  int _listingSkip = 0;
+  final int _listingLimit = 10;
+
   List<dynamic> _bids = [];
   bool _hasMoreBids = true;
   int _bidsSkip = 0;
@@ -46,6 +51,8 @@ class UserProvider extends ChangeNotifier{
   
   List<Product> get products => List.unmodifiable(_products);
   bool get hasMoreProducts => _hasMoreProducts;
+
+  List<Product> get myProducts => List.unmodifiable(_myProducts);
 
   List<dynamic> get bids => List.unmodifiable(_bids);
   bool get hasMoreBids => _hasMoreBids;
@@ -180,6 +187,8 @@ class UserProvider extends ChangeNotifier{
           if(data.length < _productLimit){
             _hasMoreProducts = false;
           }
+
+          _myProducts = products.where((product) => product.seller.username == username).toList();
         }
       }
     } catch (e) {
@@ -263,6 +272,32 @@ class UserProvider extends ChangeNotifier{
       }
     } catch(e) {
       debugPrint("Error uploading image");
+    }
+  }
+
+  Future<void> uploadProfilPic(XFile image) async{
+
+    try{
+
+      FormData formdata = FormData.fromMap({
+        "image" : await MultipartFile.fromFile(
+          image.path,
+          filename: image.name
+        )
+      });
+
+      final response = await Apiclient.dio.post(
+        '/profile/image', 
+        data: formdata,
+        options: Options(
+          contentType: 'multipart/form-data'
+        )
+      );
+
+      Future.delayed(const Duration(seconds: 2), () => refreshUsername());
+
+    } catch (e) {
+      debugPrint("Error uploading Profile Picture....");
     }
   }
 
