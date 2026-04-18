@@ -1,4 +1,5 @@
 import 'package:e_commerce_refactor/providers/NotificationProvider.dart';
+import 'package:e_commerce_refactor/theme/AppTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,15 +37,15 @@ class NotificationScreen extends StatelessWidget {
                   backgroundColor: _getCategoryColor(item.type, colors),
                   child: Icon(_getCategoryIcon(item.type), color: Colors.white),
                 ),
-                title: Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                title: Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold), textScaler: TextScaler.linear(1.3)),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.message),
+                    Text(item.message, style: text.bodyMedium, textScaler: TextScaler.linear(0.75),),
                     const SizedBox(height: 4),
                     Text(
                       _formatTimestamp(item.timeStamp), 
-                      style: const TextStyle(fontSize: 10, color: Colors.grey)
+                      style: text.labelSmall
                     ),
                   ],
                 ),
@@ -74,7 +76,18 @@ class NotificationScreen extends StatelessWidget {
   }
 
   Color _getCategoryColor(String type, ColorScheme colors) {
-    return type == 'BID' ? colors.primary : colors.secondary;
+
+    if(type.contains("Created")){
+      return colors.primary;
+    } else if(type.contains("Updated") || type.contains("Pending")){
+      return colors.warning;
+    } else if(type.contains("Deleted") || type.contains("Rejected")){
+      return colors.error;
+    } else if(type.contains("Accepted") || type.contains("Successfully")){
+      return colors.success;
+    } else {
+      return colors.secondary;
+    }
   }
 
   String _formatTimestamp(DateTime dt) {

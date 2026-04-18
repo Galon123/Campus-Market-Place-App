@@ -86,11 +86,6 @@ Future<void> initSSEConnection(UserProvider userProvider) async {
                 _processNewNotification(rawData);
               }
             }
-
-            if(line.startsWith("id: ")){
-              final itemId = line.substring(4).trim();
-              userProvider.uploadImage(itemId, image);
-            }
         },
         onError: (error) {
           debugPrint("SSE Stream Error: $error");
@@ -113,12 +108,12 @@ Future<void> initSSEConnection(UserProvider userProvider) async {
     _subscription?.cancel();
     notifyListeners();
 
-    debugPrint("Disconnected. Retrying in 5 seconds...");
+    debugPrint("Disconnected. Retrying in 1 second...");
     
     // Add a check: Only reconnect if the user is still authenticated
     // if (!userIsLoggedIn) return; 
 
-    Future.delayed(const Duration(seconds: 5), () => initSSEConnection(userProvider));
+    Future.delayed(const Duration(seconds: 1), () => initSSEConnection(userProvider));
   }
 
   void _processNewNotification(String rawData){

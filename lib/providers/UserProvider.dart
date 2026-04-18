@@ -294,7 +294,7 @@ class UserProvider extends ChangeNotifier{
         )
       );
 
-      Future.delayed(const Duration(seconds: 2), () => refreshUsername());
+      Future.delayed(const Duration(seconds: 1), () => refreshUsername());
 
     } catch (e) {
       debugPrint("Error uploading Profile Picture....");

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:e_commerce_refactor/models/Product.dart';
 import 'package:e_commerce_refactor/providers/ThemeProvider.dart';
 import 'package:e_commerce_refactor/providers/UserProvider.dart';
@@ -97,58 +98,70 @@ class _FeedScreenState extends State<FeedScreen> {
     ;
     
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(side: BorderSide(color: colors.primary,width:  2),borderRadius: BorderRadius.circular(12)),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ItemDetail(product: product))
-          );
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Image Section
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.network(imageUrl, fit: BoxFit.cover),
-            ),
-            
-            // 2. Info Section
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    "₹${product.minPrice}",
-                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
-                  ),
-                  const SizedBox(height: 4),
-                  // Show Condition (New/Used)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: colors.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      product.condition.replaceAll("_", " "),
-                      style: TextStyle(fontSize: 14, color: colors.secondary),
-                    ),
-                  ),
-                ],
+    return DottedBorder(
+      borderType: BorderType.RRect,
+      radius: Radius.circular(12),
+      dashPattern: [24,4],
+      color: colors.primary,
+      strokeWidth: 1.5,
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ItemDetail(product: product))
+            );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. Image Section
+              AspectRatio(
+                aspectRatio: 1,
+                child: Image.network(imageUrl, fit: BoxFit.cover),
               ),
-            ),
-          ],
+              
+              // 2. Info Section
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.title,
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: colors.onPrimary),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      "₹${product.minPrice}",
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 20),
+                    ),
+                    const SizedBox(height: 4),
+                    Text("Quantity : ${product.quantity}"),
+                    SizedBox(height: 8,),
+                    Wrap(
+                      spacing: 8,
+                      children: product.categories.map((category) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: colors.primary,
+                            border: Border.all(width: 1, color: Colors.white),
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Text(category, style: TextStyle(color: Colors.greenAccent,fontWeight: FontWeight.w700),),
+                        );
+                      }
+                      ).toList()
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

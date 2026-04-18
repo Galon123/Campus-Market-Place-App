@@ -45,13 +45,11 @@ class _CreateListingState extends State<CreateListing> {
 
   void clearForm() {
 
-    _titleController.clear();
-    _descController.clear();
-    _priceController.clear();
-    _quantityController.clear();
-    
-    _formkey.currentState?.reset();
-  
+      _titleController.clear();
+      _descController.clear();
+      _priceController.clear();
+      _quantityController.clear();
+
     setState(() {
       _image = null;
       _selectedCategories = [];
